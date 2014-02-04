@@ -31,9 +31,18 @@
     </div>
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Home</a></li>
+        <li class="active"><a href="#"><span class="glyphicon glyphicon-home"></span></a></li>
         <li><a href="#about">About</a></li>
         <li><a href="#contact">Contact</a></li>
+      </ul>
+      <form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search for badass anime!">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#">Sign In <span class="glyphicon glyphicon-user"></span></a></li>
       </ul>
     </div><!--/.nav-collapse -->
   </div>
