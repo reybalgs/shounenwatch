@@ -38,7 +38,7 @@
     </div>
     <div id="navbar-items" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="welcome"><span class="glyphicon glyphicon-home"></span></a></li>
+        <li class="active"><a href="<?php echo base_url('')?>"><span class="glyphicon glyphicon-home"></span></a></li>
         <li><a href="#about">About</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
@@ -49,7 +49,7 @@
         <button type="submit" class="btn btn-default">Submit</button>
       </form>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#"><p class="navbar-text"></p><span class="glyphicon glyphicon-user"></span> Sign In</a></li>
+        <li><a href="<?php echo site_url("user/login") ?>"><p class="navbar-text"></p><span class="glyphicon glyphicon-user"></span> Sign In</a></li>
       </ul>
     </div><!--/.nav-collapse -->
   </div>

@@ -3,7 +3,7 @@
     <div class="container">
         <h1 class="text-center" style="color: #ffffff; text-shadow: 2px 2px 8px #010101; padding-top: 260px" >Hey you!</h1>
         <p class="text-center" style="color: #ffffff; text-shadow: 2px 2px 8px #010101">I'm <strong>TORGUE</strong>, and I am here to ask you one question, and one question only:</p>
-        <p class="text-center"><a href='user' class="btn btn-danger btn-lg" role="button">EXPLOSIONS?!</a></p>
+        <p class="text-center"><a href="<?php echo site_url("user")?>" class="btn btn-danger btn-lg" role="button">EXPLOSIONS?!</a></p>
     </div>
 </div>
 
