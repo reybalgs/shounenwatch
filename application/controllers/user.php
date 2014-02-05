@@ -30,8 +30,10 @@ class User extends CI_Controller {
         # Set the form validation rules
         # Both fields must be filled out
         # Username must be between 1-30 characters in length, and unique
-        $this->form_validation->set_rules('login-username', 'Username', 'xss_clean');
-        $this->form_validation->set_rules('login-password', 'Password', 'xss_clean');
+        $this->form_validation->set_rules('login-username', 'Username',
+                                          'xss_clean');
+        $this->form_validation->set_rules('login-password', 'Password',
+                                          'xss_clean');
         
         if($this->form_validation->run() == FALSE) {
             # Show the pages
@@ -44,7 +46,14 @@ class User extends CI_Controller {
             $username_input = $this->input->post('login-username');
             $password_input = $this->input->post('login-password');
             
-            if($this->user_model->authenticate_user($username_input, $password_input)) {
+            if($this->user_model->authenticate_user($username_input,
+                                                    $password_input)) {
+                # Put user data into session so we can track them
+                $user = $this->user_model->get_user($username_input);
+                $userdata = array('username'=>$user->username,
+                                  'logged_in'=>TRUE);
+                $this->session->set_userdata($userdata);
+                
                 # Show success screen
                 $this->load->view('templates/header', $data);
                 $this->load->view('user/success');

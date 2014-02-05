@@ -14,7 +14,7 @@ class User_model extends CI_Model{
     public function get_user($username) {
         # Queries a user from the database based on the provided username
         $query = $this->db->get_where('user', array("username"=>$username));
-        return $query->row2();
+        return $query->row();
     }
     
     public function authenticate_user($username, $password) {

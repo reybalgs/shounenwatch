@@ -49,7 +49,17 @@
         <button type="submit" class="btn btn-default">Submit</button>
       </form>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="<?php echo site_url("user/login") ?>"><p class="navbar-text"></p><span class="glyphicon glyphicon-user"></span> Sign In</a></li>
+        <li><a href="<?php echo site_url("user/login") ?>"><p class="navbar-text"></p>
+        <?php
+            # Get the username of the user from the session if they are logged in
+            if($this->session->userdata('username')) {
+                echo 'Logged in as '.$this->session->userdata('username');
+            }
+            else {
+                echo 'Sign In';
+            }
+        ?>
+        </a></li>
       </ul>
     </div><!--/.nav-collapse -->
   </div>
