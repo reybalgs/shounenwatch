@@ -16,6 +16,7 @@ CREATE TABLE user (
     username VARCHAR(30)  NOT NULL,
     -- password set to 48 chars, 40 needed by SHA1, 8 chars reserved for salt
     password TEXT NOT NULL,
+    email TEXT NOT NULL,
     image TEXT,
     about TEXT
 );
@@ -54,10 +55,11 @@ CREATE TABLE watching (
 
 -- Populate the user table with the superuser
 INSERT INTO user (
-    username, password, about
+    username, password, email, about
 )
 VALUES (
     "admin",
     "bd85dd49d4cb9736bcc084c784701a807832952b14819bbd96dd5ccb6b3578bf",
-    "I'm the number one badass around here!"
+    "admin@shounenwatch.com",
+    "I'm the number one badass around here! You hear me!?"
 );
