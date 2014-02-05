@@ -4,6 +4,7 @@
     <?php foreach($users as $user): ?>
         <h3>ID: <?php echo $user['id']; ?></h3>
         <p><strong>Username:</strong> <?php echo $user['username']; ?></p>
+        <p><strong>Email: </strong> <?php echo $user['email'] ?></p>
         <p><strong>About:</strong> <?php echo $user['about']; ?></p>
         </br>
     <?php endforeach ?>

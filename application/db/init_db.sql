@@ -53,6 +53,16 @@ CREATE TABLE watching (
     FOREIGN KEY (animeID) REFERENCES anime(id)
 );
 
+-- Create a table for CI to store sessions in
+CREATE TABLE ci_sessions (
+    session_id VARCHAR(40) DEFAULT '0' NOT NULL PRIMARY KEY,
+    ip_address VARCHAR(45) DEFAULT '0' NOT NULL,
+    user_agent VARCHAR(120) NOT NULL,
+    last_activity INTEGER DEFAULT 0 NOT NULL,
+    userID INTEGER NOT NULL,
+    FOREIGN KEY (userID) REFERENCES user(id)
+);
+
 -- Populate the user table with the superuser
 INSERT INTO user (
     username, password, email, about
