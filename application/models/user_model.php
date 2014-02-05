@@ -17,6 +17,16 @@ class User_model extends CI_Model{
         return $query->row();
     }
     
+    public function set_user($username, $email, $password) {
+        $values = array(
+            'username'=>$username,
+            'email'=>$email,
+            'password'=>hash('sha256', $password)
+        );
+        
+        return $this->db->insert('user', $values);
+    }
+    
     public function authenticate_user($username, $password) {
         # Authenticates the username, along with the password, provided above.
         $query = $this->db->get_where('user', array("username"=>$username,

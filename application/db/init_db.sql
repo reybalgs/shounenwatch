@@ -12,8 +12,8 @@
 
 -- Create the user table
 CREATE TABLE user (
-    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    username VARCHAR(30)  NOT NULL,
+    id INTEGER NOT NULL PRIMARY KEY,
+    username VARCHAR(30) NOT NULL,
     -- password set to 48 chars, 40 needed by SHA1, 8 chars reserved for salt
     password TEXT NOT NULL,
     email TEXT NOT NULL,
@@ -23,7 +23,7 @@ CREATE TABLE user (
 
 -- Create the anime table
 CREATE TABLE anime (
-    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    id INTEGER NOT NULL PRIMARY KEY,
     userID INTEGER NOT NULL,
     name TEXT NOT NULL,
     synopsis TEXT NOT NULL,
@@ -35,7 +35,7 @@ CREATE TABLE anime (
 
 -- Create the rating table
 CREATE TABLE rating (
-    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    id INTEGER NOT NULL PRIMARY KEY,
     userID INTEGER NOT NULL,
     animeID INTEGER NOT NULL,
     rating INTEGER NOT NULL,
@@ -45,7 +45,7 @@ CREATE TABLE rating (
 
 -- Create the watching table
 CREATE TABLE watching (
-    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    id INTEGER NOT NULL PRIMARY KEY,
     userID INTEGER NOT NULL,
     animeID INTEGER NOT NULL,
     currentEpisode INTEGER NOT NULL,

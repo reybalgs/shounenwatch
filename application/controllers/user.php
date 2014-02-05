@@ -83,6 +83,58 @@ class User extends CI_Controller {
         $this->load->view('templates/footer');
     }
     
+    public function register() {
+        # Function that handles user registration
+        $this->load->helper('form');
+        $this->load->library('form_validation');
+        
+        $data['title'] = 'Register for a badass account';
+        
+        # Set the form validation rules
+        # All fields must be filled out
+        # Username must be 5-30 chars in length and unique
+        $this->form_validation->set_rules('register-username', 'Username',
+                                          'required|min_length[5]|max_length[30]|is_unique[user.username]');
+        $this->form_validation->set_rules('register-password', 'Password',
+                                          'required|matches[register-passwordconf]');
+        $this->form_validation->set_rules('register-passwordconf', 'Password Confirmation',
+                                          'required');
+        $this->form_validation->set_rules('register-email', 'Email',
+                                          'required|valid_email|is_unique[user.email]');
+        
+        if($this->form_validation->run() == FALSE) {
+            # Show the pages
+            $this->load->view('templates/header', $data);
+            $this->load->view('user/register', $data);
+            $this->load->view('templates/footer');
+        }
+        else {
+            # Get the post data
+            $username = $this->input->post('register-username');
+            $password = $this->input->post('register-password');
+            $email = $this->input->post('register-email');
+            
+            # Add the user into the database
+            $this->user_model->set_user($username, $email, $password);
+            $newuser = $this->user_model->get_user($username);
+            
+            # Log the user in by creating a session ID
+            $userdata = array(
+                'username'=>$newuser->username,
+                'logged_in'=>TRUE
+            );
+            
+            $this->session->set_userdata($userdata);
+            
+            $data['username'] = $newuser->username;
+            
+            # Show success screen
+            $this->load->view('templates/header', $data);
+            $this->load->view('user/success_register', $data);
+            $this->load->view('templates/footer');
+        }
+    }
+    
     public function view() {
     }
 }

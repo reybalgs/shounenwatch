@@ -69,7 +69,7 @@
             else {
                 # Not logged in
         ?>
-        <li><a href="<?php echo site_url("user/login") ?>">Sign In</a></li>
+        <li><a href="<?php echo site_url("user/login") ?>">Sign In/Register</a></li>
         <?php
             }
         ?>
