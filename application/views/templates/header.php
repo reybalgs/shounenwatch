@@ -49,17 +49,30 @@
         <button type="submit" class="btn btn-default">Submit</button>
       </form>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="<?php echo site_url("user/login") ?>"><p class="navbar-text"></p>
         <?php
-            # Get the username of the user from the session if they are logged in
+            # Check if the user is logged in.
+            # If they are, display their name and a dropdown menu of useful
+            # options, otherwise, just display a link to the login page.
             if($this->session->userdata('username')) {
-                echo 'Logged in as '.$this->session->userdata('username');
+        ?>
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $this->session->userdata('username')?> <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li><a href="#">View Profile</a></li>
+                <li><a href="#">Submissions</a></li>
+                <li class="divider"></li>
+                <li><a href="<?php echo site_url('user/logout') ?>">Logout</a></li>
+            </ul>
+        </li>
+        <?php
             }
             else {
-                echo 'Sign In';
+                # Not logged in
+        ?>
+        <li><a href="<?php echo site_url("user/login") ?>">Sign In</a></li>
+        <?php
             }
         ?>
-        </a></li>
       </ul>
     </div><!--/.nav-collapse -->
   </div>

@@ -54,9 +54,11 @@ class User extends CI_Controller {
                                   'logged_in'=>TRUE);
                 $this->session->set_userdata($userdata);
                 
+                $data['username'] = $user->username;
+                
                 # Show success screen
                 $this->load->view('templates/header', $data);
-                $this->load->view('user/success');
+                $this->load->view('user/success_login', $data);
                 $this->load->view('templates/footer');
             }
             else {
@@ -67,6 +69,18 @@ class User extends CI_Controller {
                 $this->load->view('templates/footer');
             }
         }
+    }
+    
+    public function logout() {
+        # Delete the user's session
+        $this->session->sess_destroy();
+        
+        $data['title'] = 'Logout';
+        
+        # Show the logout page
+        $this->load->view('templates/header', $data);
+        $this->load->view('user/success_logout');
+        $this->load->view('templates/footer');
     }
     
     public function view() {
