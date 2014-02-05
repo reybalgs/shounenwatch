@@ -10,6 +10,36 @@ class User_model extends CI_Model{
         $query = $this->db->get('user');
         return $query->result_array();
     }
+    
+    public function get_user($username) {
+        # Queries a user from the database based on the provided username
+        $query = $this->db->get_where('user', array("username"=>$username));
+        return $query->row();
+    }
+    
+    public function set_user($username, $email, $password) {
+        $values = array(
+            'username'=>$username,
+            'email'=>$email,
+            'password'=>hash('sha256', $password)
+        );
+        
+        return $this->db->insert('user', $values);
+    }
+    
+    public function authenticate_user($username, $password) {
+        # Authenticates the username, along with the password, provided above.
+        $query = $this->db->get_where('user', array("username"=>$username,
+            "password"=>hash("sha256", $password)));
+        $result = $query->result_array();
+        if(empty($result)) {
+            # Result is empty, user is not authenticated
+            return FALSE;
+        }
+        else {
+            return TRUE;
+        }
+    }
 }
 
 ?>
