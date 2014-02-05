@@ -22,6 +22,16 @@ How to work on this project
 Setting up an SQLite database
 -----------------------------
 
+##HOLD IT!##
+
+I removed support for SQLite3...for now. It's because I can't insert anything
+into the database using SQLite3 and the sloppy PDO driver that CodeIgniter
+provides. Retrieving works fine, however.
+
+For now, ignore this part and just set up your databases by copying the entire
+init_db.sql file and run it through MySQL, either through its command line
+interface or through PHPMyAdmin.
+
 1.  Install SQLite3 first, as well as the necessary packages to interface
     SQLite3 with PHP such as `php5-sqlite`.
 2.  Create an empty SQLite3 database with the filename
