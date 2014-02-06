@@ -1,9 +1,20 @@
 <div class="container">
-<div class="jumbotron" style="background: #888888 url('<?php echo base_url('')?>static/torgue.jpg') repeat center center; min-height: 200px">
+<div class="jumbotron" id="jumbotron-torgue" style="background: #888888 url('<?php echo base_url('')?>static/torgue.jpg') repeat center center; min-height: 200px">
     <div class="container">
         <h1 class="text-center" style="color: #ffffff; text-shadow: 2px 2px 8px #010101; padding-top: 260px" >Hey you!</h1>
         <p class="text-center" style="color: #ffffff; text-shadow: 2px 2px 8px #010101">I'm <strong>TORGUE</strong>, and I am here to ask you one question, and one question only:</p>
-        <p class="text-center"><a href="<?php echo site_url("user")?>" class="btn btn-danger btn-lg" role="button">EXPLOSIONS?!</a></p>
+        <p class="text-center"><a href="<?php echo site_url('user') ?>" id="explosion-btn" class="btn btn-danger btn-lg" role="button">EXPLOSIONS?!</a></p>
+        <script>
+            // Script that changes the jumbotron image when the button is pressed
+            var button = $("#explosion-btn");
+            var jumbotron = $("#jumbotron-torgue");
+            
+            // Set an event listener for the button
+            button.click(function() {
+                console.log("Explosions!?");
+                jumbotron.attr("style", "background: #ffffff url('<?php echo base_url('')?>static/torgue_explosion.jpg') repeat center center; min-height: 200px");
+            });
+        </script>
     </div>
 </div>
 
