@@ -15,6 +15,17 @@ class Anime_model extends CI_Model{
         $query = $this->db->get();
         return $query->result_array();
     }
+    
+    public function get_anime_from_user($user_id) {
+        # Gets all anime submitted by the user passed as an argument.
+        $this->db->select('anime.id, name, anime.image, airing, synopsis, episodes');
+        $this->db->from('anime');
+        $this->db->join('user', 'user.id = anime.userID');
+        $this->db->where('anime.userID', $user_id);
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }
 
 ?>

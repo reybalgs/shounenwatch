@@ -39,6 +39,7 @@
 */
 
 $route['anime'] = "anime/index";
+$route['user/profile/(:any)'] = "user/profile/$1";
 $route['user/(:any)'] = "user/$1";
 $route['user'] = "user/index";
 $route['default_controller'] = "welcome";

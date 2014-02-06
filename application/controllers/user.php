@@ -8,6 +8,7 @@ class User extends CI_Controller {
         # Superclass constructor
         parent::__construct();
         $this->load->model('user_model');
+        $this->load->model('anime_model');
     }
     
     public function index() {
@@ -16,6 +17,26 @@ class User extends CI_Controller {
         
         $this->load->view('templates/header', $data);
         $this->load->view('user/test', $data);
+        $this->load->view('templates/footer');
+    }
+    
+    public function profile($username) {
+        # Loads the user profile page based on the user passed as an argument.
+        $user = $this->user_model->get_user($username);
+        # Load all the anime submitted by the user
+        $anime = $this->anime_model->get_anime_from_user($user->id);
+        
+        $data['title'] = $user->username."'s"." profile";
+        
+        # Load important user data into data superarray
+        $data['username'] = $user->username;
+        $data['email'] = $user->email;
+        $data['about'] = $user->about;
+        $data['image'] = $user->image;
+        $data['anime'] = $anime;
+        
+        $this->load->view('templates/header', $data);
+        $this->load->view('user/profile', $data);
         $this->load->view('templates/footer');
     }
     

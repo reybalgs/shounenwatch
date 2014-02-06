@@ -70,7 +70,7 @@
         <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $this->session->userdata('username')?> <b class="caret"></b></a>
             <ul class="dropdown-menu">
-                <li><a href="#">View Profile</a></li>
+                <li><a href="<?php echo site_url('user/profile').'/'.$this->session->userdata('username')?>">View Profile</a></li>
                 <li><a href="#">Submissions</a></li>
                 <li class="divider"></li>
                 <li><a href="<?php echo site_url('user/logout') ?>">Logout</a></li>

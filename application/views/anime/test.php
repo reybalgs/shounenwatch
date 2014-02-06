@@ -4,12 +4,12 @@
     <?php foreach($animes as $anime): ?>
     <div class="row">
       <div class="col-xs-4">
-        <img src="<?php echo base_url('static')?>/aa.jpg" class="img-responsive img-thumbnail"></img> 
+        <img src="<?php echo base_url('upload/anime').'/'.$anime['image']?>" class="img-responsive img-thumbnail"></img> 
       </div>
       <div class="col-xs-8">
             <h3>ID: <?php echo $anime['id']; ?></h3>
             <p><strong>Title:</strong> <?php echo $anime['name'] ?></p>
-            <p><strong>Submitter: </strong> <?php echo $anime['username'] ?></p>
+            <p><strong>Submitter: </strong> <a href="<?php echo site_url('user/profile').'/'.$anime['username'] ?>"><?php echo $anime['username'] ?></a></p>
             <p><strong>Synopsis: </strong> <?php echo $anime['synopsis'] ?></p>
             <p><strong>Episodes:</strong> <?php echo $anime['episodes'] ?></p>
             <p><strong>Airing date:</strong> <?php echo $anime['airing'] ?></strong></p>
