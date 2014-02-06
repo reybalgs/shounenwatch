@@ -23,7 +23,7 @@
     </script>
 
 </head>
-<body style="padding-top: 70px">
+<body style="padding-top: 80px">
 <!-- Navbar goes here -->
 <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">

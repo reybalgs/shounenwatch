@@ -1,6 +1,7 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-4">
+            <div class="well">
             <?php
                 if(empty($image)) {
                     # Show a placeholder image
@@ -38,10 +39,11 @@
                 
                 if($this->session->userdata('username') == $username) {
             ?>
-            <a href="#" class="btn btn-primary btn-block">Edit Your Profile</a>
+            <a href="<?php echo site_url('user/edit_profile').'/'.$username ?>" class="btn btn-primary btn-block">Edit Your Profile</a>
             <?php
                 }
             ?>
+            </div>
         </div>
         <div class="col-xs-8">
             <h1>Submissions</h1>
@@ -86,6 +88,7 @@
                     <p><?php echo $submission['synopsis'] ?></p>
                 </div>
             </div>
+            <hr class="col-xs-12">
             <?php
                 endforeach;
                 }

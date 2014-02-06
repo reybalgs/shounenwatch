@@ -40,6 +40,22 @@ class User extends CI_Controller {
         $this->load->view('templates/footer');
     }
     
+    public function edit_profile($username) {
+        # Function that handles edits on a user's profile.
+        $this->load->helper('form');
+        $this->load->library('form_validation');
+        
+        # Get the user from the database
+        $user = $this->user_model->get_user($username);
+        
+        $data['title'] = 'Edit your profile';
+        $data['user'] = $user;
+        
+        $this->load->view('templates/header', $data);
+        $this->load->view('user/edit_profile', $data);
+        $this->load->view('templates/footer');
+    }
+    
     public function login() {
         # Login function, also handles the login page
         $this->load->helper('form');
