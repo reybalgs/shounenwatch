@@ -33,7 +33,7 @@
                 }
                 else {
             ?>
-            <p><?php echo $about ?></p>
+            <p><?php echo nl2br($about)?></p>
             <?php
                 }
                 

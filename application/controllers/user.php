@@ -77,18 +77,21 @@ class User extends CI_Controller {
             $about_input = $this->input->post('edit-about');
             $password_input = $this->input->post('edit-password-new');
             
+            # Check if there's an input in the email field
             if(empty($email_input)) {
                 $email = $user->email;
             }
             else {
                 $email = $email_input;
             }
+            # Check if there's input in the about field
             if(empty($about_input)) {
                 $about = $user->about;
             }
             else {
                 $about = $about_input;
             }
+            # Check if there's input in the password field
             if(empty($password_input)) {
                 $password = $user->password;
             }
@@ -106,6 +109,7 @@ class User extends CI_Controller {
                     $password = $user->password;
                 }
             }
+            
             # Create the user that we will be putting into the database
             $input = array(
                 'email'=>$email,
@@ -248,6 +252,52 @@ class User extends CI_Controller {
             $this->load->view('user/success_register', $data);
             $this->load->view('templates/footer');
         }
+    }
+    
+    public function upload_image() {
+        # Get the user from the database
+        $username = $this->session->userdata('username');
+        $user = $this->user_model->get_user($username);
+        
+        $data['user'] = $user;
+        
+        # Function that handles the uploading of user images.
+        # Configs for image uploading
+        #$config['upload_path'] = base_url('upload/user').'/';
+        $config['upload_path'] = './upload/user/';
+        $config['file_name'] = $username.'.jpg';
+		$config['allowed_types'] = 'gif|jpg|png|jpeg';
+		$config['max_size']	= '1024';
+		$config['max_width']  = '2048';
+		$config['max_height']  = '2048';
+        $config['overwrite'] = TRUE;
+        
+        $this->load->library('upload', $config);
+        
+        $data['title'] = 'Upload an image';
+        
+        if($this->upload->do_upload()) {
+            $upload_data = $this->upload->data();
+            $image = $upload_data['file_name'];
+            
+            $input = array(
+                'image'=>$image
+            );
+            
+            # Perform the query
+            #echo '<p>ID is: '.$user->id.'</p>';
+            #echo '<p>Image filename is: '.$image.'</p>';
+            $this->user_model->edit_user($user->id, $input);
+            
+            # Refresh the current user
+            $data['user'] = $this->user_model->get_user($username);
+        }
+        #echo '<p>Upload path: '.$config['upload_path'].'</p>';
+        #echo $this->upload->display_errors();
+        
+        $this->load->view('templates/header', $data);
+        $this->load->view('user/upload_image', $data);
+        $this->load->view('templates/footer');
     }
     
     public function view() {

@@ -81,7 +81,7 @@
                     ));
                 }
             ?>
-            <a href="#" class="btn btn-primary btn-block">Change Profile Picture</a>
+            <a href="<?php echo site_url('user/upload_image') ?>" class="btn btn-primary btn-block">Change Profile Picture</a>
         </div>
     </div>
 </div>
