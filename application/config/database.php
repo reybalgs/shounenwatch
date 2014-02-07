@@ -50,7 +50,7 @@ $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
 $db['default']['username'] = 'root';
-$db['default']['password'] = 'banana';
+$db['default']['password'] = '';
 $db['default']['database'] = 'shounenwatch';
 $db['default']['dbdriver'] = 'mysql'; # pdo driver for sqlite3
 $db['default']['dbprefix'] = '';
