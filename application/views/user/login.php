@@ -1,4 +1,4 @@
-<div class="container" style="padding-left: 16em; padding-right: 16em">
+<div class="container" style="max-width: 640px">
 	<?php
 		# Show an alert here if user submitted wrong credentials
 		if($invalid) {
