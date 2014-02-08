@@ -17,6 +17,12 @@ class User_model extends CI_Model{
         return $query->row();
     }
     
+    public function get_user_id($id) {
+        # Queries a user from the database based on the provided id
+        $query = $this->db->get_where('user', array("id"=>$id));
+        return $query->row();
+    }
+    
     public function set_user($username, $email, $password) {
         $values = array(
             'username'=>$username,
@@ -25,6 +31,13 @@ class User_model extends CI_Model{
         );
         
         return $this->db->insert('user', $values);
+    }
+    
+    public function edit_user($id, $data) {
+        # Modifies the user's email with the given id with the email passed as
+        # a second parameter
+        $this->db->where('id', $id);
+        return $this->db->update('user', $data);
     }
     
     public function authenticate_user($username, $password) {
