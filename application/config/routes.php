@@ -38,6 +38,7 @@
 |
 */
 
+$route['anime/(:num)'] = "anime/detail/$1";
 $route['anime'] = "anime/index";
 $route['user/upload_image'] = "user/upload_image";
 $route['user/edit_profile/(:any)'] = "user/edit_profile/$1";
