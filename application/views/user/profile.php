@@ -50,7 +50,7 @@
             <?php
                 if($this->session->userdata('username') == $username) {
             ?>
-            <a href="#" class="btn btn-default">Submit New Anime</a>
+            <a href="<?php echo site_url('anime/submit') ?>" class="btn btn-default">Submit New Anime</a>
             <?php
                 }
                 if(empty($anime)) {

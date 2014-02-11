@@ -25,6 +25,15 @@ class Anime extends CI_Controller {
         $this->load->view('templates/footer');
     }
     
+    public function submit() {
+        # Handles the addition of new anime to the service
+        $data['title'] = 'Add new anime';
+        
+        $this->load->view('templates/header', $data);
+        $this->load->view('anime/create_new', $data);
+        $this->load->view('templates/footer');
+    }
+    
     public function index() {
         $data['animes'] = $this->anime_model->get_all_anime();
         $data['title'] = 'Anime index';
