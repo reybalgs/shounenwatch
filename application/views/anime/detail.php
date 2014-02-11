@@ -1,4 +1,20 @@
 <div class="container">
+    <?php
+        if(isset($submit_success)) {
+    ?>
+    <div class="alert alert-success">
+        <p>Your anime has been successfully submitted!</p>
+    </div>
+    <?php
+        }
+        if(isset($image_errors)) {
+    ?>
+    <div class="alert alert-danger">
+        <p><?php echo $image_errors ?></p>
+    </div>
+    <?php
+        }
+    ?>
     <div class="row">
         <div class="col-xs-4">
             <?php

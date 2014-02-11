@@ -1,7 +1,18 @@
 <div class="container">
     <h1>Submit New Anime</h1>
     <p class="text-muted">Before posting new anime, be sure to check out our rules, as well as to see if the anime you're posting is already here.</p>
-    <form class="form-horizontal" role="form">
+    <?php
+        if(validation_errors()) {
+    ?>
+    <div class="alert alert-danger">
+        <?php
+            echo validation_errors();
+        ?>
+    </div>
+    <?php
+        }
+    ?>
+    <?php echo form_open_multipart(site_url('anime/submit'), array('class'=>'form-horizontal', 'role'=>'form')) ?>
         <div class="form-group">
             <label for="animeInputName" class="col-sm-2 control-label">Title</label>
             <div class="col-sm-10">
@@ -20,7 +31,7 @@
         <script>
             // Script for date picker
              $(function() {
-                $( "#animeInputAiring" ).datepicker();
+                $( "#animeInputAiring" ).datepicker({ dateFormat: "yy-mm-dd" });
             });
         </script>
         <div class="form-group">
@@ -37,7 +48,7 @@
                     echo form_input($title_input);
                 ?>
             </div>
-            <span class="help-block col-sm-6">Put the exact airing date of the anime, wherever it was aired first. In the case of movies or anything not broadcasted on television, use its release date instead.</span>
+            <span class="help-block col-sm-6"><b><i>The format is yyyy-mm-dd.</i></b> Put the exact airing date of the anime, wherever it was aired first. In the case of movies or anything not broadcasted on television, use its release date instead.</span>
         </div>
         <div class="form-group">
             <label for="animeInputAiring" class="col-sm-2 control-label">Episodes</label>
@@ -86,9 +97,8 @@
         <div class="form-group">
             <label class="col-sm-2 control-label"></label>
             <div class="col-sm-4">
-                <input type="submit" value="Submit" class="btn btn-primary pull-right"/>
+                <button class="btn btn-primary pull-right" type="submit">Submit</button>
             </div>
             <span class="help-block col-sm-6">Please review the accuracy and authenticity of all fields before submitting.</span>
         </div>
-    </form>
 </div>

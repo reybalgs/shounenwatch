@@ -10,7 +10,8 @@ class Anime extends CI_Controller {
         $this->load->model('user_model');
     }
     
-    public function detail($anime_id) {
+    public function detail($anime_id, $submit_success = NULL,
+                           $image_errors = NULL) {
         # Displays anime based on the passed ID.
         # First we need to load the anime from the database.
         $anime = $this->anime_model->get_anime($anime_id);
@@ -27,11 +28,99 @@ class Anime extends CI_Controller {
     
     public function submit() {
         # Handles the addition of new anime to the service
-        $data['title'] = 'Add new anime';
+        $this->load->helper('form');
+        $this->load->library('form_validation');
         
-        $this->load->view('templates/header', $data);
-        $this->load->view('anime/create_new', $data);
-        $this->load->view('templates/footer');
+        $data['title'] = 'Submit new anime';
+        
+        # Form validation rules
+        # Anime name is required
+        $this->form_validation->set_rules('anime-title', 'Title',
+                                          'required|is_unique[anime.name]');
+        # Airing is required
+        $this->form_validation->set_rules('anime-airing', 'Airing',
+                                          'required');
+        # Episodes is required and only 0 to n is allowed
+        $this->form_validation->set_rules('anime-episodes', 'Episodes',
+                                          'required|is_natural');
+        # Synopsis is required
+        $this->form_validation->set_rules('anime-synopsis', 'Synopsis',
+                                          'required');
+        
+        if($this->form_validation->run() == FALSE) {
+            # Either we haven't done the form yet, or validation has turned up
+            # false
+            $this->load->view('templates/header', $data);
+            $this->load->view('anime/create_new', $data);
+            $this->load->view('templates/footer');
+        }
+        else {
+            # Forms seem to be okay
+            # Get the post data
+            $title = $this->input->post('anime-title');
+            $airing = $this->input->post('anime-airing');
+            $episodes = $this->input->post('anime-episodes');
+            $synopsis = $this->input->post('anime-synopsis');
+            $image = $this->input->post('userfile');
+            
+            # Config files for uploading anime images
+            $config['upload_path'] = './upload/anime/';
+            # Shorten the title into 24 chars most
+            $config['file_name'] = substr($title, 0, 24).'.jpg';
+            $config['allowed_types'] = 'gif|jpg|png|jpeg';
+            $config['max_size']	= '2048';
+            $config['max_width']  = '4096';
+            $config['max_height']  = '4096';
+            $config['overwrite'] = TRUE;
+            
+            # Load the upload library
+            $this->load->library('upload', $config);
+            
+            # Get the ID of the currently logged in user
+            $user = ($this->user_model->get_user($this->session->userdata('username')));
+            $user_id = $user->id;
+            
+            # Put data into an array that will be passed to the model
+            if($this->upload->do_upload()) {
+                $upload_data = $this->upload->data();
+                $animedata = array(
+                    'name'=>$title,
+                    'userID'=>$user_id,
+                    'synopsis'=>$synopsis,
+                    'episodes'=>$episodes,
+                    'airing'=>$airing,
+                    'image'=>$upload_data['file_name']
+                );
+            }
+            else {
+                $animedata = array(
+                    'name'=>$title,
+                    'userID'=>$user_id,
+                    'synopsis'=>$synopsis,
+                    'episodes'=>$episodes,
+                    'airing'=>$airing,
+                );
+            }
+            
+            # DEBUG file info messages
+            /*
+            log_message('debug', 'Image upload errors: '.$this->upload->display_errors());
+            log_message('debug', 'Image file name: '.$upload_data['file_name']);
+            log_message('debug', 'Raw file name: '.$upload_data['raw_name']);
+            log_message('debug', 'File extension: '.$upload_data['file_ext']);
+            log_message('debug', 'Is this an image: '.$upload_data['is_image']);
+            log_message('debug', 'File size: '.$upload_data['file_size']);
+            */
+            
+            # Perform the query
+            $this->anime_model->set_anime($animedata);
+            
+            # Get the new anime from the database
+            $new_anime = $this->anime_model->get_anime_name($title);
+            
+            # Show the detail page of the new anime
+            $this->detail($new_anime->id, TRUE, $this->upload->display_errors());
+        }
     }
     
     public function index() {

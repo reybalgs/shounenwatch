@@ -69,6 +69,7 @@
                                 'src'=>base_url('static').'/'.'anime_placeholder.gif',
                                 'class'=>'img-thumbnail img-responsive'
                             );
+                            echo img($properties);
                         }
                         else {
                             $properties = array(

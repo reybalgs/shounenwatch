@@ -5,6 +5,11 @@ class Anime_model extends CI_Model{
         $this->load->database();
     }
     
+    public function set_anime($animeinfo) {
+        # Sets user information
+        return $this->db->insert('anime', $animeinfo);
+    }
+    
     public function get_all_anime() {
         # Gets all anime from the database and returns them in an array
         # Includes the usernames of the submitters
@@ -19,6 +24,12 @@ class Anime_model extends CI_Model{
     public function get_anime($anime_id) {
         # Gets and returns anime from the database
         $query = $this->db->get_where('anime', array("id"=>$anime_id));
+        return $query->row();
+    }
+    
+    public function get_anime_name($anime_name) {
+        # Gets and returns an anime based on a name
+        $query = $this->db->get_where('anime', array('name'=>$anime_name));
         return $query->row();
     }
     
