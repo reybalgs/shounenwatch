@@ -10,6 +10,12 @@ class Anime_model extends CI_Model{
         return $this->db->insert('anime', $animeinfo);
     }
     
+    public function edit_anime($id, $animeinfo) {
+        # Edits the anime assigned to the given id.
+        $this->db->where('id', $id);
+        return $this->db->update('anime', $animeinfo);
+    }
+    
     public function get_all_anime() {
         # Gets all anime from the database and returns them in an array
         # Includes the usernames of the submitters

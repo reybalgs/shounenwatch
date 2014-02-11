@@ -266,7 +266,7 @@ class User extends CI_Controller {
         #$config['upload_path'] = base_url('upload/user').'/';
         $config['upload_path'] = './upload/user/';
         $config['file_name'] = $username.'.jpg';
-		$config['allowed_types'] = 'gif|jpg|png';
+		$config['allowed_types'] = 'gif|jpg|png|jpeg';
 		$config['max_size']	= '2048';
 		$config['max_width']  = '4096';
 		$config['max_height']  = '4096';

@@ -1,6 +1,12 @@
 <div class="container">
-    <h1>Submit New Anime</h1>
-    <p class="text-muted">Before posting new anime, be sure to check out our rules, as well as to see if the anime you're posting is already here.</p>
+    <a href="<?php echo site_url('anime').'/'.$anime_id ?>" class="btn btn-default"><i class="fa fa-angle-left"></i> Go Back?</a>
+    <h1>Edit Anime Information</h1>
+    <div class="alert alert-info">
+        <strong>NOTE: </strong>Your changes here will reflect for everyone on this site.
+    </div>
+    <div class="alert alert-info">
+        <strong>Remember: </strong>If you don't want to make any changes to a field, leave it blank.
+    </div>
     <?php
         if(validation_errors()) {
     ?>
@@ -12,7 +18,7 @@
     <?php
         }
     ?>
-    <?php echo form_open_multipart(site_url('anime/submit'), array('class'=>'form-horizontal', 'role'=>'form')) ?>
+    <?php echo form_open_multipart(site_url('anime/edit').'/'.$anime_id, array('class'=>'form-horizontal', 'role'=>'form')) ?>
         <?php
             if(form_error('anime-title')) {
         ?>
@@ -28,7 +34,6 @@
                 <?php
                     $title_input = array(
                         'name'=>'anime-title',
-                        'value'=>set_value('anime-title'),
                         'class'=>'form-control',
                         'id'=>'animeInputTitle',
                         'placeholder'=>'Title'
@@ -36,6 +41,7 @@
                     
                     echo form_input($title_input);
                 ?>
+                <span class="help-block">Your anime's title is currently set to <strong><?php echo $curr_anime->name ?></strong>.</span>
                 <span class="help-block">As much as possible, input your anime in <i>romaji</i> (roman character representation) to help non-Japanese users find it. Also, put in the full name of the anime, and do not abbreviate anything.</span>
             </div>
         </div>
@@ -62,7 +68,7 @@
                 <?php
                     $title_input = array(
                         'name'=>'anime-airing',
-                        'value'=>set_value('anime-airing'),
+                        'value'=>$curr_anime->airing,
                         'class'=>'form-control',
                         'id'=>'animeInputAiring',
                         'type'=>'date',
@@ -71,7 +77,11 @@
                     echo form_input($title_input);
                 ?>
             </div>
-            <span class="help-block col-sm-6"><b><i>The format is yyyy-mm-dd.</i></b> Put the exact airing date of the anime, wherever it was aired first. In the case of movies or anything not broadcasted on television, use its release date instead.</span>
+            <span class="help-block col-sm-6">
+                <?php echo $curr_anime->name ?>'s airing date is currently set to <strong><?php echo mdate("%M %d %Y", mysql_to_unix($curr_anime->airing)) ?></strong>.
+                <br/>
+                <b><i>The format is yyyy-mm-dd.</i></b> Put the exact airing date of the anime, wherever it was aired first. In the case of movies or anything not broadcasted on television, use its release date instead.
+            </span>
         </div>
         <?php
             if(form_error('anime-episodes')) {
@@ -90,7 +100,7 @@
                 <?php
                     $title_input = array(
                         'name'=>'anime-episodes',
-                        'value'=>set_value('anime-episodes'),
+                        'value'=>$curr_anime->episodes,
                         'class'=>'form-control',
                         'id'=>'animeInputEpisodes',
                         'type'=>'date',
@@ -99,7 +109,11 @@
                     echo form_input($title_input);
                 ?>
             </div>
-            <span class="help-block col-sm-6">If the total number of episodes are unknown, put a zero (0) here.</span>
+            <span class="help-block col-sm-6">
+                <?php echo $curr_anime->name ?> currently has <strong><?php echo $curr_anime->episodes ?></strong> episodes in total.
+                <br/>
+                If the total number of episodes are unknown, put a zero (0) here.
+            </span>
         </div>
         <?php
             if(form_error('anime-synopsis')) {
@@ -118,7 +132,7 @@
                 <?php
                     echo form_textarea(array(
                         'name'=>'anime-synopsis',
-                        'value'=>set_value('anime-synopsis'),
+                        'value'=>$curr_anime->synopsis,
                         'id'=>'animeInputSynopsis',
                         'class'=>'form-control',
                         'placeholder'=>'Synopsis'
@@ -131,11 +145,20 @@
             <label for="animeInputImage" class="col-sm-2 control-label">Image</label>
             <div class="col-sm-4">
                 <?php
-                    echo img(array(
-                        'src'=>base_url('static').'/'.'anime_placeholder.gif',
-                        'alt'=>'Anime image',
-                        'class'=>'img-thumbnail'
-                    ));
+                    if(isset($curr_anime->image)) {
+                        echo img(array(
+                            'src'=>base_url('upload/anime').'/'.$curr_anime->image,
+                            'alt'=>$curr_anime->name.' image',
+                            'class'=>'img-thumbnail'
+                        ));
+                    }
+                    else {
+                        echo img(array(
+                            'src'=>base_url('static').'/'.'anime_placeholder.gif',
+                            'alt'=>'Anime image',
+                            'class'=>'img-thumbnail'
+                        ));
+                    }
                 ?>
                 <input type="file" name="userfile" size="20"/>
             </div>
