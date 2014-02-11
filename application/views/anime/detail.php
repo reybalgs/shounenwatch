@@ -44,7 +44,7 @@
                 <?php
                     if($this->session->userdata('username') == $user->username) {
                 ?>
-                <button type="button" class="btn btn-primary">Edit Information</button>
+                <a href="<?php echo site_url('anime/edit').'/'.$anime->id ?>" class="btn btn-primary"><i class="fa fa-edit"></i> Edit Information</a>
                 <?php
                     }
                     else {

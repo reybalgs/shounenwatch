@@ -13,7 +13,16 @@
         }
     ?>
     <?php echo form_open_multipart(site_url('anime/submit'), array('class'=>'form-horizontal', 'role'=>'form')) ?>
+        <?php
+            if(form_error('anime-title')) {
+        ?>
+        <div class="form-group has-error">
+        <?php
+            }
+            else {
+        ?>
         <div class="form-group">
+        <?php } ?>
             <label for="animeInputName" class="col-sm-2 control-label">Title</label>
             <div class="col-sm-10">
                 <?php
@@ -23,6 +32,7 @@
                         'id'=>'animeInputTitle',
                         'placeholder'=>'Title'
                     );
+                    
                     echo form_input($title_input);
                 ?>
                 <span class="help-block">As much as possible, input your anime in <i>romaji</i> (roman character representation) to help non-Japanese users find it. Also, put in the full name of the anime, and do not abbreviate anything.</span>
@@ -34,7 +44,18 @@
                 $( "#animeInputAiring" ).datepicker({ dateFormat: "yy-mm-dd" });
             });
         </script>
+        <?php
+            if(form_error('anime-airing')) {
+        ?>
+        <div class="form-group has-error">
+        <?php
+            }
+            else {
+        ?>
         <div class="form-group">
+        <?php
+            }
+        ?>
             <label for="animeInputAiring" class="col-sm-2 control-label">Airing Date</label>
             <div class="col-sm-4">
                 <?php
@@ -50,7 +71,18 @@
             </div>
             <span class="help-block col-sm-6"><b><i>The format is yyyy-mm-dd.</i></b> Put the exact airing date of the anime, wherever it was aired first. In the case of movies or anything not broadcasted on television, use its release date instead.</span>
         </div>
+        <?php
+            if(form_error('anime-episodes')) {
+        ?>
+        <div class="form-group has-error">
+        <?php
+            }
+            else {
+        ?>
         <div class="form-group">
+        <?php
+            }
+        ?>
             <label for="animeInputAiring" class="col-sm-2 control-label">Episodes</label>
             <div class="col-sm-4">
                 <?php
@@ -66,7 +98,18 @@
             </div>
             <span class="help-block col-sm-6">If the total number of episodes are unknown, put a zero (0) here.</span>
         </div>
+        <?php
+            if(form_error('anime-synopsis')) {
+        ?>
+        <div class="form-group has-error">
+        <?php
+            }
+            else {
+        ?>
         <div class="form-group">
+        <?php
+            }
+        ?>
             <label for="animeInputSynopsis" class="col-sm-2 control-label">Synopsis</label>
             <div class="col-sm-4">
                 <?php

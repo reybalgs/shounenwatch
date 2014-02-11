@@ -38,7 +38,7 @@ class Anime extends CI_Controller {
         $this->form_validation->set_rules('anime-title', 'Title',
                                           'required|is_unique[anime.name]');
         # Airing is required
-        $this->form_validation->set_rules('anime-airing', 'Airing',
+        $this->form_validation->set_rules('anime-airing', 'Airing Date',
                                           'required');
         # Episodes is required and only 0 to n is allowed
         $this->form_validation->set_rules('anime-episodes', 'Episodes',
@@ -118,9 +118,44 @@ class Anime extends CI_Controller {
             # Get the new anime from the database
             $new_anime = $this->anime_model->get_anime_name($title);
             
-            # Show the detail page of the new anime
+            # Show the detail page of the new anime_model
             $this->detail($new_anime->id, TRUE, $this->upload->display_errors());
         }
+    }
+    
+    public function edit($anime_id) {
+        # Edits the anime at the given ID.
+        $this->load->helper('form');
+        $this->load->library('form_validation');
+        
+        # Get the username of the currently logged-in user.
+        $username = $this->session->userdata('username');
+        # Get the user from that username
+        $user = $this->user_model->get_user($username);
+        
+        # Get the anime from the database
+        $curr_anime = $this->anime_model->get_anime($anime_id);
+        
+        $data['title'] = 'Editing '.$curr_anime->name;
+        $data['anime_id'] = $anime_id;
+        
+        # Form validation rules
+        # Anime name is required
+        $this->form_validation->set_rules('anime-title', 'Title',
+                                          'required|is_unique[anime.name]');
+        # Airing is required
+        $this->form_validation->set_rules('anime-airing', 'Airing',
+                                          'required');
+        # Episodes is required and only 0 to n is allowed
+        $this->form_validation->set_rules('anime-episodes', 'Episodes',
+                                          'required|is_natural');
+        # Synopsis is required
+        $this->form_validation->set_rules('anime-synopsis', 'Synopsis',
+                                          'required');
+        
+        $this->load->view('templates/header', $data);
+        $this->load->view('anime/edit', $data);
+        $this->load->view('templates/footer');
     }
     
     public function index() {
