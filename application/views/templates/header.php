@@ -12,9 +12,15 @@
     <link href="<?php echo base_url('') ?>dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- JQuery -->
     <script src="<?php echo base_url('') ?>jquery-1.11.0.min.js"></script>
+    <!-- JQuery UI -->
+    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <!-- JQuery UI CSS -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <script src="<?php echo base_url('') ?>dist/js/bootstrap.min.js"></script>
+    <!-- Font Awesome CDN -->
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
     
     <script>
         if (window.jQuery) {
@@ -72,6 +78,7 @@
             <ul class="dropdown-menu">
                 <li><a href="<?php echo site_url('user/profile').'/'.$this->session->userdata('username')?>">View Profile</a></li>
                 <li><a href="#">Submissions</a></li>
+                <li><a href="<?php echo site_url('anime/submit') ?>">Submit New Anime</a></li>
                 <li class="divider"></li>
                 <li><a href="<?php echo site_url('user/logout') ?>">Logout</a></li>
             </ul>

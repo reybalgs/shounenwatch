@@ -50,7 +50,7 @@
             <?php
                 if($this->session->userdata('username') == $username) {
             ?>
-            <a href="#" class="btn btn-default">Submit New Anime</a>
+            <a href="<?php echo site_url('anime/submit') ?>" class="btn btn-default">Submit New Anime</a>
             <?php
                 }
                 if(empty($anime)) {
@@ -69,6 +69,7 @@
                                 'src'=>base_url('static').'/'.'anime_placeholder.gif',
                                 'class'=>'img-thumbnail img-responsive'
                             );
+                            echo img($properties);
                         }
                         else {
                             $properties = array(
@@ -80,12 +81,12 @@
                     ?>
                 </div>
                 <div class="col-xs-8">
-                    <h3><?php echo $submission['name'] ?></h3>
-                    <p class="text-muted">Aired at <?php echo mdate("%m %d %Y", mysql_to_unix($submission['airing'])) ?></p>
+                    <h3><a href="<?php echo site_url('anime').'/'.$submission['id'] ?>"><?php echo $submission['name'] ?></a></h3>
+                    <p class="text-muted">Aired at <?php echo mdate("%M %d %Y", mysql_to_unix($submission['airing'])) ?></p>
                     <p class="text-muted">Total Episodes: <?php echo $submission['episodes'] ?></p>
                     <p class="text-muted"><?php echo number_format(rand(0, 5000)) ?> people are watching this.</p>
                     <h4>Synopsis:</h4>
-                    <p><?php echo $submission['synopsis'] ?></p>
+                    <p><?php echo nl2br($submission['synopsis']) ?></p>
                 </div>
             </div>
             <hr class="col-xs-12">
