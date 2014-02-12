@@ -8,6 +8,7 @@ class Anime extends CI_Controller {
         parent::__construct();
         $this->load->model('anime_model');
         $this->load->model('user_model');
+        $this->load->model('watching_model');
     }
     
     public function detail($anime_id, $submit_success = NULL,
@@ -20,6 +21,38 @@ class Anime extends CI_Controller {
         $data['anime'] = $anime;
         $data['user'] = $user;
         $data['title'] = $anime->name;
+        
+        $this->load->view('templates/header', $data);
+        $this->load->view('anime/detail', $data);
+        $this->load->view('templates/footer');
+    }
+ 
+    public function add_to_watchlist($anime_id) {
+        # Adds the given anime to the given user's watch list.
+        $anime = $this->anime_model->get_anime($anime_id);
+        $user = $this->user_model->get_user($this->session->userdata('username'));
+        
+        $data['title'] = 'Added to watchlist';
+        $data['anime'] = $anime;
+        $data['user'] = $user;
+        
+        $this->watching_model->add_anime_to_user_watchlist($anime_id, $user->id);
+        
+        $this->load->view('templates/header', $data);
+        $this->load->view('anime/detail', $data);
+        $this->load->view('templates/footer');
+    }
+    
+    public function remove_from_watchlist($anime_id) {
+        # Removes the given anime from the given user's watch list.
+        $anime = $this->anime_model->get_anime($anime_id);
+        $user = $this->user_model->get_user($this->session->userdata('username'));
+        
+        $data['title'] = 'Added to watchlist';
+        $data['anime'] = $anime;
+        $data['user'] = $user;
+        
+        $this->watching_model->remove_anime_from_user_watchlist($anime_id, $user->id);
         
         $this->load->view('templates/header', $data);
         $this->load->view('anime/detail', $data);

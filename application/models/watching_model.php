@@ -38,5 +38,36 @@ class Watching_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+    
+    public function check_if_watching($user_id, $anime_id) {
+        # Returns true or false whether or not the anime is in the user's watch list.
+        $this->db->select('user.username, anime.name, watching.currentEpisode');
+        $this->db->from('anime');
+        $this->db->join('watching', 'anime.id = watching.animeID');
+        $this->db->join('user', 'watching.userID = user.id');
+        $this->db->where('watching.animeID', $anime_id);
+        $this->db->where('watching.userID', $user_id);
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+    
+    public function add_anime_to_user_watchlist($anime_id, $user_id) {
+        # Adds the given anime to the given user's watchlist.
+        $data = array(
+            'userID'=>$user_id,
+            'animeID'=>$anime_id,
+            'currentEpisode'=>0
+        );
+        
+        return $this->db->insert('watching', $data);
+    }
+    
+    public function remove_anime_from_user_watchlist($anime_id, $user_id) {
+        # Removes the given anime from the given user's watchlist.
+        $this->db->where('animeID', $anime_id);
+        $this->db->where('userID', $user_id);
+        return $this->db->delete('watching');
+    }
 }
 ?>

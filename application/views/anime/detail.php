@@ -7,13 +7,6 @@
     </div>
     <?php
         }
-        if(isset($image_errors)) {
-    ?>
-    <div class="alert alert-danger">
-        <p><?php echo $image_errors ?></p>
-    </div>
-    <?php
-        }
     ?>
     <div class="row">
         <div class="col-xs-4">
@@ -52,8 +45,17 @@
                 <button type="button" class="btn btn-primary" disabled="disabled">Edit Information</button>
                 <?php
                     }
+                    if($this->watching_model->check_if_watching($user->id, $anime->id)) {
                 ?>
-                <button type="button" class="btn btn-default">Add to Watching</button>
+                <a href="<?php echo site_url('anime/remove_from_watchlist').'/'.$anime->id?>" class="btn btn-danger"><i class="fa fa-times"></i> Remove from Watching</a>
+                <?php
+                    }
+                    else {
+                ?>
+                <a href="<?php echo site_url('anime/add_to_watchlist').'/'.$anime->id?>" class="btn btn-primary"><i class="fa fa-plus"></i> Add to Watching List</a>
+                <?php
+                    }
+                ?>
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Rate This Anime <span class="caret"></span></button>
                 <ul class="dropdown-menu">
                     <li><a href="#">No rating</a></li>
