@@ -1,5 +1,4 @@
 <div class="container">
-    <p>Apparently here is what everybody is watching at the moment:</p>
     <table class="table table-striped table-bordered">
         <tr>
             <td>Username</td>
