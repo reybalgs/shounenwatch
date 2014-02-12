@@ -38,8 +38,10 @@
 |
 */
 
+$route['watching'] = "watching/index";
 $route['anime/submit'] = "anime/submit";
 $route['anime/edit/(:num)'] = "anime/edit/$1";
+$route['anime/add_to_watchlist/(:num)'] = "user/add_anime_to_watch_list/$1";
 $route['anime/(:num)'] = "anime/detail/$1";
 $route['anime'] = "anime/index";
 $route['user/upload_image'] = "user/upload_image";

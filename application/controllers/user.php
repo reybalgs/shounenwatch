@@ -202,6 +202,11 @@ class User extends CI_Controller {
         $this->load->view('templates/footer');
     }
     
+    public function add_anime_to_watch_list($anime_id) {
+        # Function that handles adding the provided anime to the user's watch list.
+        
+    }
+    
     public function register() {
         # Function that handles user registration
         $this->load->helper('form');
