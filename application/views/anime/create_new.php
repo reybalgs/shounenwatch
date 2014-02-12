@@ -23,7 +23,7 @@
         ?>
         <div class="form-group">
         <?php } ?>
-            <label for="animeInputName" class="col-sm-2 control-label">Title</label>
+            <label for="animeInputName" class="col-sm-2 control-label">Title*</label>
             <div class="col-sm-10">
                 <?php
                     $title_input = array(
@@ -57,7 +57,7 @@
         <?php
             }
         ?>
-            <label for="animeInputAiring" class="col-sm-2 control-label">Airing Date</label>
+            <label for="animeInputAiring" class="col-sm-2 control-label">Airing Date*</label>
             <div class="col-sm-4">
                 <?php
                     $title_input = array(
@@ -85,7 +85,7 @@
         <?php
             }
         ?>
-            <label for="animeInputAiring" class="col-sm-2 control-label">Episodes</label>
+            <label for="animeInputAiring" class="col-sm-2 control-label">Episodes*</label>
             <div class="col-sm-4">
                 <?php
                     $title_input = array(
@@ -113,7 +113,7 @@
         <?php
             }
         ?>
-            <label for="animeInputSynopsis" class="col-sm-2 control-label">Synopsis</label>
+            <label for="animeInputSynopsis" class="col-sm-2 control-label">Synopsis*</label>
             <div class="col-sm-4">
                 <?php
                     echo form_textarea(array(

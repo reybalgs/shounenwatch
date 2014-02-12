@@ -66,7 +66,7 @@ class Anime extends CI_Controller {
             # Config files for uploading anime images
             $config['upload_path'] = './upload/anime/';
             # Shorten the title into 24 chars most
-            $config['file_name'] = substr($title, 0, 24).'.jpg';
+            $config['file_name'] = substr($title, 0, 64).'.jpg';
             $config['allowed_types'] = 'gif|jpg|png|jpeg';
             $config['max_size']	= '2048';
             $config['max_width']  = '4096';
@@ -190,7 +190,7 @@ class Anime extends CI_Controller {
             # Config files for uploading anime images
             $config['upload_path'] = './upload/anime/';
             # Shorten the title into 24 chars most
-            $config['file_name'] = substr($title, 0, 24).'.jpg';
+            $config['file_name'] = substr($title, 0, 64).'.jpg';
             $config['allowed_types'] = 'gif|jpg|png|jpeg';
             $config['max_size']	= '2048';
             $config['max_width']  = '4096';

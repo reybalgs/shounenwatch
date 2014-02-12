@@ -29,7 +29,7 @@
         ?>
         <div class="form-group">
         <?php } ?>
-            <label for="animeInputName" class="col-sm-2 control-label">Title</label>
+            <label for="animeInputName" class="col-sm-2 control-label">Title*</label>
             <div class="col-sm-10">
                 <?php
                     $title_input = array(
@@ -63,7 +63,7 @@
         <?php
             }
         ?>
-            <label for="animeInputAiring" class="col-sm-2 control-label">Airing Date</label>
+            <label for="animeInputAiring" class="col-sm-2 control-label">Airing Date*</label>
             <div class="col-sm-4">
                 <?php
                     $title_input = array(
@@ -95,7 +95,7 @@
         <?php
             }
         ?>
-            <label for="animeInputAiring" class="col-sm-2 control-label">Episodes</label>
+            <label for="animeInputAiring" class="col-sm-2 control-label">Episodes*</label>
             <div class="col-sm-4">
                 <?php
                     $title_input = array(
@@ -127,7 +127,7 @@
         <?php
             }
         ?>
-            <label for="animeInputSynopsis" class="col-sm-2 control-label">Synopsis</label>
+            <label for="animeInputSynopsis" class="col-sm-2 control-label">Synopsis*</label>
             <div class="col-sm-4">
                 <?php
                     echo form_textarea(array(
@@ -142,7 +142,7 @@
             <span class="help-block col-sm-6">As much as possible, copy and paste the official synopsis released by the anime's artists/production companies, and not your own thoughts on the anime. This will help verify the authenticity and accuracy of your submissions, as well as help other users find it.</span>
         </div>
         <div class="form-group">
-            <label for="animeInputImage" class="col-sm-2 control-label">Image</label>
+            <label for="animeInputImage" class="col-sm-2 control-label">Image*</label>
             <div class="col-sm-4">
                 <?php
                     if(isset($curr_anime->image)) {
