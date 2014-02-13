@@ -126,6 +126,12 @@
                         }
                         else {
                             $i = $i + 1;
+                            if(!(next($anime))) {
+                                # There aren't any more anime next to list
+                    ?>
+            </div>
+                    <?php
+                            }
                         }
                     ?>
                     <?php
@@ -135,7 +141,6 @@
                     ?>
                 </div>
             </div>
-        </div>
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h1 class="panel-title">
@@ -153,7 +158,7 @@
                             foreach($watchlist as $watched_anime) {
                         ?>
                         <tr>
-                            <td><?php echo $watched_anime['name'] ?></td>
+                            <td><a href="<?php echo site_url('anime').'/'.$watched_anime['animeID'] ?>"><?php echo $watched_anime['name'] ?></a></td>
                             <td><?php echo $watched_anime['currentEpisode'] ?></td>
                             <td><?php echo $watched_anime['episodes'] ?></td>
                         </tr>
@@ -163,5 +168,6 @@
                     </table>
                 </div>
             </div>
+        </div>
     </div>
 </div>

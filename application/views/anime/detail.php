@@ -7,6 +7,14 @@
     </div>
     <?php
         }
+        if(!($anime->active)) {
+    ?>
+    <div class="alert alert-warning">
+        <h3>WARNING!</h3>
+        <p>This anime has been deleted by its original submitter and has been made inactive. You can still track your progress on it, however.</p>
+    </div>
+    <?php
+        }
     ?>
     <div class="row">
         <div class="col-sm-4">
@@ -47,7 +55,7 @@
                     }
                     if($this->watching_model->check_if_watching($user->id, $anime->id)) {
                 ?>
-                <a href="<?php echo site_url('anime/remove_from_watchlist').'/'.$anime->id?>" class="btn btn-danger"><i class="fa fa-times"></i> Remove from Watching</a>
+                <a href="<?php echo site_url('anime/remove_from_watchlist').'/'.$anime->id?>" class="btn btn-danger"><i class="fa fa-times"></i> Drop from Watching</a>
                 <?php
                     }
                     else {

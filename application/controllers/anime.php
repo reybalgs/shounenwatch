@@ -59,6 +59,36 @@ class Anime extends CI_Controller {
         $this->load->view('templates/footer');
     }
     
+    public function delete($anime_id) {
+        # Deletes or makes inactive the given anime.
+        # First, let's see if the anime has any viewers
+        $viewers = count($this->watching_model->get_watching_anime($anime_id));
+        
+        if($viewers) {
+            # This anime has viewers, we can only make it inactive.
+            $this->anime_model->make_anime_inactive($anime_id);
+            
+            # Go back to the anime's page.
+            $this->detail($anime_id);
+        }
+        else {
+            # This anime has no viewers, we can safely delete it from the
+            # database
+            $this->anime_model->delete_anime($anime_id);
+            
+            # Go to a page containing all anime.
+            $this->index();
+        }
+    }
+    
+    public function restore($anime_id) {
+        # Restores the currently inactive anime.
+        $this->anime_model->make_anime_active($anime_id);
+        
+        # Go back to the anime's page.
+        $this->detail($anime_id);
+    }
+    
     public function submit() {
         # Handles the addition of new anime to the service
         $this->load->helper('form');
@@ -122,6 +152,7 @@ class Anime extends CI_Controller {
                     'synopsis'=>$synopsis,
                     'episodes'=>$episodes,
                     'airing'=>$airing,
+                    'active'=>1,
                     'image'=>$upload_data['file_name']
                 );
             }
@@ -132,6 +163,7 @@ class Anime extends CI_Controller {
                     'synopsis'=>$synopsis,
                     'episodes'=>$episodes,
                     'airing'=>$airing,
+                    'active'=>1
                 );
             }
             

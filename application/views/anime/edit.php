@@ -183,6 +183,9 @@
                 </div>
             </div>
         <div class="col-md-3">
+            <?php
+            if($curr_anime->active) {
+            ?>
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h1 class="panel-title">Delete your anime</h1>
@@ -192,6 +195,22 @@
                     <button class="btn btn-danger btn-block" data-toggle="modal" data-target="#deleteModal" type="button"><i class="fa fa-times"></i> Delete Anime</button>
                 </div>
             </div>
+            <?php
+            }
+            else {
+            ?>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h1 class="panel-title">Restore your anime</h1>
+                </div>
+                <div class="panel-body">
+                    <p>This restores your anime to the listings, making it available for people to find again.</p>
+                    <a href="<?php echo site_url('anime/restore').'/'.$curr_anime->id ?>" class="btn btn-success btn-block"><i class="fa fa-check-circle-o"></i> Restore Anime</a>
+                </div>
+            </div>
+            <?php
+            }
+            ?>
         </div>
         </div>
     </div>
@@ -208,16 +227,9 @@
             <div class="modal-body">
                 <p class="text-danger">If you delete your anime now, the following actions will be performed:</p>
                 <ul class="fa-ul">
-                    <?php
-                        /*
-                         * There should  be code here that retrieves the number of viewers an anime has,
-                         * but at this time we haven't implmented that yet so we will use random values
-                         * for now.
-                         */
-                    ?>
                     <li>
                         <i class="fa-li fa fa-frown-o"></i>
-                        <strong><?php echo $curr_anime->name ?></strong> has <?php echo number_format(rand(0, 5000)) ?> viewers. If you delete it, they will still be able to track their watching habits.
+                        <strong><?php echo $curr_anime->name ?></strong> has <?php echo number_format(count($this->watching_model->get_watching_anime($curr_anime->id))) ?> viewers. If you delete it, they will still be able to track their watching habits.
                     </li>
                     <li>
                         <i class="fa-li fa fa-users"></i>
@@ -231,7 +243,7 @@
             </div>
             <div class="modal-footer">
                 <p class="text-danger">Are you still sure about deleting <strong><?php echo $curr_anime->name ?></strong>? This action <strong>CANNOT BE REVERTED!</strong></p>
-                <a href="#" class="btn btn-sm btn-danger"><i class="fa fa-thumbs-o-up"></i> Yes, I'm sure!</a>
+                <a href="<?php echo site_url('anime/delete').'/'.$curr_anime->id ?>" class="btn btn-sm btn-danger"><i class="fa fa-thumbs-o-up"></i> Yes, I'm sure!</a>
             </div>
         </div>
     </div>
