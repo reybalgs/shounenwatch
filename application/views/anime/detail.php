@@ -30,7 +30,7 @@
             <h1><?php echo $anime->name ?></h1>
             <p>Aired at <?php echo mdate("%M %d %Y", mysql_to_unix($anime->airing)) ?></p>
             <p>Total Episodes: <?php echo $anime->episodes ?></p>
-            <p><?php echo number_format(rand(0, 5000)) ?> people are watching this.</p>
+            <p><?php echo number_format(count($this->watching_model->get_watching_anime($anime->id))) ?> people are watching this.</p>
             <h2>Synopsis</h2>
             <p><?php echo nl2br($anime->synopsis) ?></p>
             <div class="btn-group">

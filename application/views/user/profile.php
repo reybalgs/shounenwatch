@@ -113,8 +113,8 @@
                                 <a href="<?php echo site_url('anime').'/'.$submission['id'] ?>">
                                     <h4><?php echo $submission['name'] ?></h4>
                                 </a>
-                                <p class="text-muted">Aired <?php echo $submission['airing'] ?></p>
-                                <p class="text-muted"><?php echo number_format(rand(0, 5000)) ?> viewers</p>
+                                <p class="text-muted"><i class="fa fa-video-camera"></i> Aired <?php echo mdate("%M %d %Y", mysql_to_unix($submission['airing'])) ?></p>
+                                <p class="text-muted"><i class="fa fa-users"></i> <?php echo number_format(count($this->watching_model->get_watching_anime($submission['id']))) ?> viewers</p>
                             </div>
                         </div>
                     <?php
