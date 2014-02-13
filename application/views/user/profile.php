@@ -82,7 +82,9 @@
                         else {
                             $i = 1;
                             foreach($anime as $submission):
+                            if($submission['active']) {
                                 if($i == 1) {
+                            
                     ?>
                     <div class="row" style="padding-bottom: 2em">
                     <?php
@@ -127,6 +129,7 @@
                         }
                     ?>
                     <?php
+                            }
                         endforeach;
                         }
                     ?>
