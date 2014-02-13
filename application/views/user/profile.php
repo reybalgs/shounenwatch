@@ -133,5 +133,32 @@
                 </div>
             </div>
         </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h1 class="panel-title">
+                        Watchlist
+                    </h1>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-striped table-bordered">
+                        <tr>
+                            <th>Anime Title</th>
+                            <th>Current Episode</th>
+                            <th>Total Episodes</th>
+                        </tr>
+                        <?php
+                            foreach($watchlist as $watched_anime) {
+                        ?>
+                        <tr>
+                            <td><?php echo $watched_anime['name'] ?></td>
+                            <td><?php echo $watched_anime['currentEpisode'] ?></td>
+                            <td><?php echo $watched_anime['episodes'] ?></td>
+                        </tr>
+                        <?php
+                            }
+                        ?>
+                    </table>
+                </div>
+            </div>
     </div>
 </div>

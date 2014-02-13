@@ -9,6 +9,7 @@ class User extends CI_Controller {
         parent::__construct();
         $this->load->model('user_model');
         $this->load->model('anime_model');
+        $this->load->model('watching_model');
     }
     
     public function index() {
@@ -25,6 +26,8 @@ class User extends CI_Controller {
         $user = $this->user_model->get_user($username);
         # Load all the anime submitted by the user
         $anime = $this->anime_model->get_anime_from_user($user->id);
+        # Load the user's watchlist
+        $watchlist = $this->watching_model->get_watching_from_user($user->id);
         
         $data['title'] = $user->username."'s"." profile";
         
@@ -34,9 +37,11 @@ class User extends CI_Controller {
         $data['about'] = $user->about;
         $data['image'] = $user->image;
         $data['anime'] = $anime;
+        $data['watchlist'] = $watchlist;
         
         $this->load->view('templates/header', $data);
         $this->load->view('user/profile', $data);
+        #$this->load->view('tests/tabs', $data);
         $this->load->view('templates/footer');
     }
     

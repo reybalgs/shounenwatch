@@ -9,7 +9,7 @@
         }
     ?>
     <div class="row">
-        <div class="col-xs-4">
+        <div class="col-sm-4">
             <?php
                 if(empty($anime->image)) {
                     $properties = array(
@@ -26,7 +26,7 @@
                 echo img($properties);
             ?>
         </div>
-        <div class="col-xs-8">
+        <div class="col-sm-8">
             <h1><?php echo $anime->name ?></h1>
             <p>Aired at <?php echo mdate("%M %d %Y", mysql_to_unix($anime->airing)) ?></p>
             <p>Total Episodes: <?php echo $anime->episodes ?></p>
