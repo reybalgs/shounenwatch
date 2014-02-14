@@ -49,7 +49,7 @@ class Watching_model extends CI_Model {
         $this->db->where('watching.userID', $user_id);
         
         $query = $this->db->get();
-        return $query->result_array();
+        return $query->row();
     }
     
     public function add_anime_to_user_watchlist($anime_id, $user_id) {

@@ -39,9 +39,11 @@
 */
 
 $route['test/tabs'] = "user/tabs_test";
+
 $route['watching/anime/(:num)'] = "watching/get_watching_anime/$1";
 $route['watching/user/(:num)'] = "watching/get_watching_from_user/$1";
 $route['watching'] = "watching/index";
+
 $route['anime/remove_from_watchlist/(:num)/'] = "anime/remove_anime_from_watch_list/$1";
 $route['anime/add_to_watchlist/(:num)/'] = "anime/add_anime_to_watch_list/$1";
 $route['anime/restore/(:num)'] = "anime/restore/$1";
@@ -50,11 +52,14 @@ $route['anime/submit'] = "anime/submit";
 $route['anime/edit/(:num)'] = "anime/edit/$1";
 $route['anime/(:num)'] = "anime/detail/$1";
 $route['anime'] = "anime/index";
+
 $route['user/upload_image'] = "user/upload_image";
 $route['user/edit_profile/(:any)'] = "user/edit_profile/$1";
+$route['user/delete/(:num)'] = "user/delete/$1";
 $route['user/profile/(:any)'] = "user/profile/$1";
 $route['user/(:any)'] = "user/$1";
 $route['user'] = "user/index";
+
 $route['default_controller'] = "welcome";
 #$route['404_override'] = '';
 

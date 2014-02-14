@@ -16,11 +16,15 @@ class Anime extends CI_Controller {
         # Displays anime based on the passed ID.
         # First we need to load the anime from the database.
         $anime = $this->anime_model->get_anime($anime_id);
-        $user = $this->user_model->get_user_id($anime->userID);
+        $submitter = $this->user_model->get_user_id($anime->userID);
+        $logged_in_user = $this->user_model->get_user($this->session->userdata('username'));
+        $watching = $this->watching_model->check_if_watching($logged_in_user->id, $anime_id);
         
         $data['anime'] = $anime;
-        $data['user'] = $user;
+        $data['submitter'] = $submitter;
+        $data['logged_in_user'] = $logged_in_user;
         $data['title'] = $anime->name;
+        $data['watching'] = $watching;
         
         $this->load->view('templates/header', $data);
         $this->load->view('anime/detail', $data);
@@ -38,9 +42,7 @@ class Anime extends CI_Controller {
         
         $this->watching_model->add_anime_to_user_watchlist($anime_id, $user->id);
         
-        $this->load->view('templates/header', $data);
-        $this->load->view('anime/detail', $data);
-        $this->load->view('templates/footer');
+        $this->detail($anime_id);
     }
     
     public function remove_from_watchlist($anime_id) {
@@ -54,9 +56,7 @@ class Anime extends CI_Controller {
         
         $this->watching_model->remove_anime_from_user_watchlist($anime_id, $user->id);
         
-        $this->load->view('templates/header', $data);
-        $this->load->view('anime/detail', $data);
-        $this->load->view('templates/footer');
+        $this->detail($anime_id);
     }
     
     public function delete($anime_id) {

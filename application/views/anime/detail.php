@@ -36,6 +36,7 @@
         </div>
         <div class="col-sm-8">
             <h1><?php echo $anime->name ?></h1>
+            <h4>Submitted by <a href="<?php echo site_url('user/profile').'/'.$submitter->username ?>"><?php echo $submitter->username ?></a></h4>
             <p>Aired at <?php echo mdate("%M %d %Y", mysql_to_unix($anime->airing)) ?></p>
             <p>Total Episodes: <?php echo $anime->episodes ?></p>
             <p><?php echo number_format(count($this->watching_model->get_watching_anime($anime->id))) ?> people are watching this.</p>
@@ -43,7 +44,7 @@
             <p><?php echo nl2br($anime->synopsis) ?></p>
             <div class="btn-group">
                 <?php
-                    if($this->session->userdata('username') == $user->username) {
+                    if($this->session->userdata('username') == $submitter->username) {
                 ?>
                 <a href="<?php echo site_url('anime/edit').'/'.$anime->id ?>" class="btn btn-primary"><i class="fa fa-edit"></i> Edit Information</a>
                 <?php
@@ -53,7 +54,7 @@
                 <button type="button" class="btn btn-primary" disabled="disabled">Edit Information</button>
                 <?php
                     }
-                    if($this->watching_model->check_if_watching($user->id, $anime->id)) {
+                    if($watching) {
                 ?>
                 <a href="<?php echo site_url('anime/remove_from_watchlist').'/'.$anime->id?>" class="btn btn-danger"><i class="fa fa-times"></i> Drop from Watching</a>
                 <?php

@@ -1,4 +1,7 @@
 <div class="container">
+    <?php
+    if($user->active) {
+    ?>
     <div class="row">
         <div class="col-md-4">
             <div class="well">
@@ -63,7 +66,7 @@
                         if(empty($anime)) {
                     ?>
                     <div class="text-center">
-                        <i class="fa fa-question-circle fa-5x"></i>
+                        <h1><i class="fa fa-question-circle fa-5x"></i></h1>
                         <?php
                             if($this->session->userdata('username') == $username) {
                         ?>
@@ -170,4 +173,13 @@
             </div>
         </div>
     </div>
+    <?php
+    }
+    else {
+    ?>
+    <h1 class="text-center"><i class="fa fa-frown-o fa-5x"></i></h1>
+    <p class="text-center">This user profile has been deleted.</p>
+    <?php
+    }
+    ?>
 </div>

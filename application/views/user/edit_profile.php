@@ -97,6 +97,41 @@
                     <a href="<?php echo site_url('user/upload_image') ?>" class="btn btn-default btn-block"><i class="fa fa-picture-o"></i> Change Profile Picture</a>
                 </div>
             </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h1 class="panel-title">Delete your profile</h1>
+                </div>
+                <div class="panel-body">
+                    <p class="text-danger"><strong>WARNING!</strong> This is irreversible.</p>
+                    <button type="button" class="btn btn-danger btn-block" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-times"></i> Delete your account</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php # warning modal ?>
+<div class="modal fade" id="deleteModal" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i></button>
+                <h3 class="modal-title" id="deleteModalLabel">Are you sure about this?</h3>
+            </div>
+            <div class="modal-body">
+                <h3 class="text-danger">THIS ACTION CANNOT BE UNDONE!</h3>
+                <p>Here's a lowdown on what's going to happen if you delete your profile:</p>
+                <ul>
+                    <li>Your anime will <strong>not</strong> be removed from the system. However, <strong>they will be marked as inactive</strong>. This allows people who are tracking your submissions to keep doing so.</li>
+                    <li>Your profile will be inaccessible by other people.</li>
+                    <li>You won't be able to register with the same username and email address again.</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <p>Are you still sure? You could just forget about your account if you don't want it anymore.</p>
+                <p class="text-danger">Remember, deleting your account <strong>CANNOT BE UNDONE!</strong></p>
+                <a href="<?php echo site_url('user/delete').'/'.$user->id ?>" class="btn btn-sm btn-danger"><i class="fa fa-thumbs-o-up"></i> Yes, I'm sure!</a>
+            </div>
         </div>
     </div>
 </div>

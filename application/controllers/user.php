@@ -21,6 +21,25 @@ class User extends CI_Controller {
         $this->load->view('templates/footer');
     }
     
+    public function delete($user_id) {
+        # Deletes the given user by making them inactive, as well as all the
+        # anime they have submitted.
+        
+        # Get all the anime this user has submitted.
+        $user_anime = $this->anime_model->get_anime_from_user($user_id);
+        
+        foreach($user_anime as $anime) {
+            # Make each anime inactive
+            $this->anime_model->make_anime_inactive($anime['id']);
+        }
+        
+        # Make the user's profile inactive
+        $this->user_model->make_inactive($user_id);
+        
+        # Log the user out
+        $this->logout();
+    }
+    
     public function profile($username) {
         # Loads the user profile page based on the user passed as an argument.
         $user = $this->user_model->get_user($username);
@@ -32,6 +51,7 @@ class User extends CI_Controller {
         $data['title'] = $user->username."'s"." profile";
         
         # Load important user data into data superarray
+        $data['user'] = $user;
         $data['username'] = $user->username;
         $data['email'] = $user->email;
         $data['about'] = $user->about;
