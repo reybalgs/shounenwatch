@@ -17,7 +17,7 @@ class Watching_model extends CI_Model {
     
     public function get_watching_from_user($user_id) {
         # Returns a table on all the anime being watched by the given user.
-        $this->db->select('user.id as userID, user.username, anime.id as animeID, anime.name, watching.currentEpisode, anime.episodes');
+        $this->db->select('watching.id as watchingID, user.id as userID, user.username, anime.id as animeID, anime.name, watching.currentEpisode, anime.episodes');
         $this->db->from('anime');
         $this->db->join('watching', 'anime.id = watching.animeID');
         $this->db->join('user', 'watching.userID = user.id');
@@ -25,6 +25,12 @@ class Watching_model extends CI_Model {
         
         $query = $this->db->get();
         return $query->result_array();
+    }
+    
+    public function set_watching_episode($watching_id, $episode) {
+        # Sets the current episode of the watching entry to the given episode.
+        $this->db->where('id', $watching_id);
+        return $this->db->update('watching', array('currentEpisode'=>$episode));
     }
     
     public function get_watching_anime($anime_id) {
@@ -57,7 +63,7 @@ class Watching_model extends CI_Model {
         $data = array(
             'userID'=>$user_id,
             'animeID'=>$anime_id,
-            'currentEpisode'=>0
+            'currentEpisode'=>1
         );
         
         return $this->db->insert('watching', $data);

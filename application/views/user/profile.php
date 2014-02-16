@@ -148,6 +148,13 @@
                 <div class="panel-heading">
                     <h1 class="panel-title">
                         Watchlist
+                        <?php
+                            if($this->session->userdata('username') == $username) {
+                        ?>
+                        <a href="<?php echo site_url('user/manage_watchlist').'/'.$user->id?>" class="btn btn-default btn-xs pull-right"><i class="fa fa-pencil"></i> Manage</a>
+                        <?php
+                            }
+                        ?>
                     </h1>
                 </div>
                 <div class="panel-body">
@@ -163,7 +170,16 @@
                         <tr>
                             <td><a href="<?php echo site_url('anime').'/'.$watched_anime['animeID'] ?>"><?php echo $watched_anime['name'] ?></a></td>
                             <td><?php echo $watched_anime['currentEpisode'] ?></td>
-                            <td><?php echo $watched_anime['episodes'] ?></td>
+                            <td>
+                                <?php
+                                if($watched_anime['episodes'] > 0) {
+                                    echo $watched_anime['episodes'];
+                                }
+                                else {
+                                    echo 'Unknown';
+                                }
+                                ?>
+                            </td>
                         </tr>
                         <?php
                             }
