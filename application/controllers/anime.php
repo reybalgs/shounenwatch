@@ -9,6 +9,7 @@ class Anime extends CI_Controller {
         $this->load->model('anime_model');
         $this->load->model('user_model');
         $this->load->model('watching_model');
+        $this->load->model('rating_model');
     }
     
     public function detail($anime_id, $submit_success = NULL,
@@ -19,8 +20,12 @@ class Anime extends CI_Controller {
         $submitter = $this->user_model->get_user_id($anime->userID);
         $logged_in_user = $this->user_model->get_user($this->session->userdata('username'));
         $watching = $this->watching_model->check_if_watching($logged_in_user->id, $anime_id);
+        $ratings = $this->rating_model->get_all_ratings_from_anime($anime_id);
+        $rating = $this->rating_model->get_rating_average($ratings);
         
         $data['anime'] = $anime;
+        $data['ratings'] = $ratings;
+        $data['rating'] = $rating;
         $data['submitter'] = $submitter;
         $data['logged_in_user'] = $logged_in_user;
         $data['title'] = $anime->name;

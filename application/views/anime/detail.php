@@ -49,6 +49,8 @@
             ?>
             </p>
             <p><?php echo number_format(count($this->watching_model->get_watching_anime($anime->id))) ?> people are watching this.</p>
+            <p>Rating: <?php echo $this->rating_model->get_rating_stars($rating) ?> <?php echo $rating / 1.0 ?> (<?php echo count($ratings) ?> ratings)
+            </p>
             <h2>Synopsis</h2>
             <p><?php echo nl2br($anime->synopsis) ?></p>
             <div class="btn-group">

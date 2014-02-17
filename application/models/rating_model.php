@@ -4,21 +4,72 @@ class Rating_model extends CI_Model {
         $this->load->database();
     }
     
+    public function get_rating_stars($rating) {
+        # Returns stars (in a string) for the given rating.
+        $string = '';
+        
+        if($rating == NULL) {
+            $string = '<i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i>';
+            
+        }
+        
+        if($rating >= 0 and $rating < 0.5) {
+            $string = '<i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i>';
+        }
+        else if($rating >= 0.5 and $rating < 1.0) {
+            $string = '<i class="fa fa-star-half-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i>';
+        }
+        else if($rating >= 1.0 and $rating < 1.5) {
+            $string = '<i class="fa fa-star"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i>';
+        }
+        else if($rating >= 1.5 and $rating < 2.0) {
+            $string = '<i class="fa fa-star"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i>';
+        }
+        else if($rating >= 2.0 and $rating < 2.5) {
+            $string = '<i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i>';
+        }
+        else if($rating >= 2.5 and $rating < 3.0) {
+            $string = '<i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i>';
+        }
+        else if($rating >= 3.0 and $rating < 3.5) {
+            $string = '<i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i>';
+        }
+        else if($rating >= 3.5 and $rating < 4.0) {
+            $string = '<i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star-o"></i>';
+        }
+        else if($rating >= 4.0 and $rating < 4.5) {
+            $string = '<i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-o"></i>';
+        }
+        else if($rating >= 4.5 and $rating < 5.0) {
+            $string = '<i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half-o"></i>';
+        }
+        else if($rating == 5.0) {
+            $string = '<i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>';
+        }
+        
+        return $string;
+    }
+    
     public function get_rating_average($ratings) {
         # Returns the average (on a scale of .5s) of the given array of ratings.
         $ratings_count = count($ratings);
         $total_ratings = 0;
         
-        # Add all the ratings together
-        foreach($ratings as $rating) {
-            $total_ratings += $rating['rating'];
+        if($ratings_count > 0) {
+            # Add all the ratings together
+            foreach($ratings as $rating) {
+                $total_ratings += $rating['rating'];
+            }
+            
+            # Get the average
+            $total_ratings = $total_ratings / ($ratings_count * 1.0);
+            
+            # Round by the nearest .5
+            return round($total_ratings, 1);
         }
-        
-        # Get the average
-        $total_ratings = $total_ratings / ($ratings_count * 1.0);
-        
-        # Round by the nearest .5
-        return round($total_ratings, 1);
+        else {
+            return 0.0;
+        }
     }
     
     public function get_all_ratings() {
