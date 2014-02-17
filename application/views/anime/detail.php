@@ -53,81 +53,100 @@
             </p>
             <h2>Synopsis</h2>
             <p><?php echo nl2br($anime->synopsis) ?></p>
-            <div class="btn-group">
-                <?php
-                    if($this->session->userdata('username') == $submitter->username) {
-                ?>
-                <a href="<?php echo site_url('anime/edit').'/'.$anime->id ?>" class="btn btn-primary"><i class="fa fa-edit"></i> Edit Information</a>
-                <?php
-                    }
-                    else {
-                ?>
-                <button type="button" class="btn btn-primary" disabled="disabled">Edit Information</button>
-                <?php
-                    }
-                    if($this->session->userdata('username')) {
-                        if($watching) {
-                ?>
-                <a href="<?php echo site_url('anime/remove_from_watchlist').'/'.$anime->id?>" class="btn btn-danger"><i class="fa fa-times"></i> Drop from Watching</a>
-                <?php
+            <?php
+            if($this->session->userdata('logged_in')) {
+            ?>
+                <div class="btn-group">
+                    <?php
+                        if($this->session->userdata('username') == $submitter->username) {
+                    ?>
+                    <a href="<?php echo site_url('anime/edit').'/'.$anime->id ?>" class="btn btn-primary"><i class="fa fa-edit"></i> Edit Information</a>
+                    <?php
                         }
                         else {
-                ?>
-                <a href="<?php echo site_url('anime/add_to_watchlist').'/'.$anime->id?>" class="btn btn-primary"><i class="fa fa-plus"></i> Add to Watching List</a>
-                <?php
+                    ?>
+                    <button type="button" class="btn btn-primary" disabled="disabled">Edit Information</button>
+                    <?php
                         }
-                    }
-                    else {
-                ?>
-                <button type="button" class="btn btn-default" disabled="disabled">Log in to add to watchlist</button>
-                <?php
-                    }
-                ?>
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Rate This Anime <span class="caret"></span></button>
-                <ul class="dropdown-menu">
-                    <li><a href="#">No rating</a></li>
-                    <li><a href="#">
-                        <span class="glyphicon glyphicon-star">
-                        <span class="glyphicon glyphicon-star-empty">
-                        <span class="glyphicon glyphicon-star-empty">
-                        <span class="glyphicon glyphicon-star-empty">
-                        <span class="glyphicon glyphicon-star-empty">
-                        </span>
-                    </a></li>
-                    <li><a href="#">
-                        <span class="glyphicon glyphicon-star">
-                        <span class="glyphicon glyphicon-star">
-                        <span class="glyphicon glyphicon-star-empty">
-                        <span class="glyphicon glyphicon-star-empty">
-                        <span class="glyphicon glyphicon-star-empty">
-                        </span>
-                    </a></li>
-                    <li><a href="#">
-                        <span class="glyphicon glyphicon-star">
-                        <span class="glyphicon glyphicon-star">
-                        <span class="glyphicon glyphicon-star">
-                        <span class="glyphicon glyphicon-star-empty">
-                        <span class="glyphicon glyphicon-star-empty">
-                        </span>
-                    </a></li>
-                    <li><a href="#">
-                        <span class="glyphicon glyphicon-star">
-                        <span class="glyphicon glyphicon-star">
-                        <span class="glyphicon glyphicon-star">
-                        <span class="glyphicon glyphicon-star">
-                        <span class="glyphicon glyphicon-star-empty">
-                        </span>
-                    </a></li>
-                    <li><a href="#">
-                        <span class="glyphicon glyphicon-star">
-                        <span class="glyphicon glyphicon-star">
-                        <span class="glyphicon glyphicon-star">
-                        <span class="glyphicon glyphicon-star">
-                        <span class="glyphicon glyphicon-star">
-                        </span>
-                    </a></li>
-                </ul>
-            </div>
+                        if($this->session->userdata('username')) {
+                            if($watching) {
+                    ?>
+                    <a href="<?php echo site_url('anime/remove_from_watchlist').'/'.$anime->id?>" class="btn btn-danger"><i class="fa fa-times"></i> Drop from Watching</a>
+                    <?php
+                            }
+                            else {
+                    ?>
+                    <a href="<?php echo site_url('anime/add_to_watchlist').'/'.$anime->id?>" class="btn btn-primary"><i class="fa fa-plus"></i> Add to Watching List</a>
+                    <?php
+                            }
+                        }
+                        else {
+                    ?>
+                    <button type="button" class="btn btn-default" disabled="disabled">Log in to add to watchlist</button>
+                    <?php
+                        }
+                    ?>
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        <?php
+                        $user_rating = $this->rating_model->get_user_anime_rating($this->session->userdata('user_id'), $anime->id);
+                        if($user_rating) {
+                            echo 'Your rating: '.$this->rating_model->get_rating_stars($user_rating->rating).' <i class="fa fa-caret-down"></i>';
+                        }
+                        else {
+                        ?>
+                        Rate This Anime <i class="fa fa-caret-down"></i>
+                        <?php
+                        }
+                        ?>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <?php
+                        if($user_rating) {
+                        ?>
+                        <li><a href="<?php echo site_url('rating/remove').'/'.$user_rating->ratingID.'/'.$anime->id?>">Remove your rating</a></li>
+                        <?php
+                        }
+                        ?>
+                        <li><a href="<?php echo site_url('rating/set').'/'.$anime->id.'/'.$this->session->userdata('user_id').'/'.'1' ?>">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                        </a></li>
+                        <li><a href="<?php echo site_url('rating/set').'/'.$anime->id.'/'.$this->session->userdata('user_id').'/'.'2' ?>">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                        </a></li>
+                        <li><a href="<?php echo site_url('rating/set').'/'.$anime->id.'/'.$this->session->userdata('user_id').'/'.'3' ?>">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                        </a></li>
+                        <li><a href="<?php echo site_url('rating/set').'/'.$anime->id.'/'.$this->session->userdata('user_id').'/'.'4' ?>">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-o"></i>
+                        </a></li>
+                        <li><a href="<?php echo site_url('rating/set').'/'.$anime->id.'/'.$this->session->userdata('user_id').'/'.'5' ?>">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </a></li>
+                    </ul>
+                </div>
+            <?php
+            }
+            ?>
         </div>
     </div>
 </div>

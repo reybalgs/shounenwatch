@@ -42,6 +42,8 @@
 $route['test/tabs'] = "user/tabs_test";
 
 # Rating routes
+$route['rating/set/(:num)/(:num)/(:num)'] = "rating/set_anime_rating/$1/$2/$3";
+$route['rating/remove/(:num)/(:num)'] = "rating/remove_rating/$1/$2";
 $route['rating/ratings'] = "rating/index";
 
 # Watching routes

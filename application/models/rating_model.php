@@ -4,6 +4,11 @@ class Rating_model extends CI_Model {
         $this->load->database();
     }
     
+    public function set_rating($data) {
+        # Inserts a rating entry into the rating table.
+        return $this->db->insert('rating', $data);
+    }
+    
     public function get_rating_stars($rating) {
         # Returns stars (in a string) for the given rating.
         $string = '';
@@ -81,6 +86,18 @@ class Rating_model extends CI_Model {
         
         $query = $this->db->get();
         return $query->result_array();
+    }
+    
+    public function remove_rating($rating_id) {
+        # Deletes a rating using its ID.
+        $this->db->where('id', $rating_id);
+        return $this->db->delete('rating');
+    }
+    
+    public function modify_rating($rating_id, $rating) {
+        # Changes the rating for the given entry to the rating provided.
+        $this->db->where('id', $rating_id);
+        return $this->db->update('rating', array('rating'=>$rating));
     }
     
     public function get_all_ratings_from_user($user_id) {
