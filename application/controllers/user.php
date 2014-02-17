@@ -10,6 +10,7 @@ class User extends CI_Controller {
         $this->load->model('user_model');
         $this->load->model('anime_model');
         $this->load->model('watching_model');
+        $this->load->model('rating_model');
     }
     
     public function index() {
