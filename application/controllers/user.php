@@ -280,6 +280,7 @@ class User extends CI_Controller {
                 # Put user data into session so we can track them
                 $user = $this->user_model->get_user($username_input);
                 $userdata = array('username'=>$user->username,
+                                  'user_id'=>$user->id,
                                   'logged_in'=>TRUE);
                 $this->session->set_userdata($userdata);
                 

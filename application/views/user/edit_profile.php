@@ -67,7 +67,7 @@
                                 <span class="help-block">If you don't want to change your password, just leave these fields blank.</span>
                             </div>
                         </div>
-                        <button class="btn btn-primary pull-right" type="submit"><i class="fa fa-check"></i> Save Changes</button>
+                        <button class="btn btn-success pull-right" type="submit"><i class="fa fa-check"></i> Save Changes</button>
                 </div>
             </div>
         </div>

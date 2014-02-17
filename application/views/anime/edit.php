@@ -49,8 +49,8 @@
                                     
                                     echo form_input($title_input);
                                 ?>
-                                <span class="help-block">Your anime's title is currently set to <strong><?php echo $curr_anime->name ?></strong>.</span>
-                                <span class="help-block">As much as possible, input your anime in <i>romaji</i> (roman character representation) to help non-Japanese users find it. Also, put in the full name of the anime, and do not abbreviate anything.</span>
+                                <span class="help-block text-justify">Your anime's title is currently set to <strong><?php echo $curr_anime->name ?></strong>.</span>
+                                <span class="help-block text-justify">As much as possible, input your anime in <i>romaji</i> (roman character representation) to help non-Japanese users find it. Also, put in the full name of the anime, and do not abbreviate anything.</span>
                             </div>
                         </div>
                         <script>
@@ -85,7 +85,7 @@
                                     echo form_input($title_input);
                                 ?>
                             </div>
-                            <span class="help-block col-sm-4">
+                            <span class="help-block col-sm-4 text-justify">
                                 <?php echo $curr_anime->name ?>'s airing date is currently set to <strong><?php echo mdate("%M %d %Y", mysql_to_unix($curr_anime->airing)) ?></strong>.
                                 <br/>
                                 <b><i>The format is yyyy-mm-dd.</i></b> Put the exact airing date of the anime, wherever it was aired first. In the case of movies or anything not broadcasted on television, use its release date instead.
@@ -117,7 +117,7 @@
                                     echo form_input($title_input);
                                 ?>
                             </div>
-                            <span class="help-block col-sm-4">
+                            <span class="help-block col-sm-4 text-justify">
                                 <?php echo $curr_anime->name ?> currently has <strong><?php echo $curr_anime->episodes ?></strong> episodes in total.
                                 <br/>
                                 If the total number of episodes are unknown, put a zero (0) here.
@@ -147,7 +147,7 @@
                                     ));
                                 ?>
                             </div>
-                            <span class="help-block col-sm-4">As much as possible, copy and paste the official synopsis released by the anime's artists/production companies, and not your own thoughts on the anime. This will help verify the authenticity and accuracy of your submissions, as well as help other users find it.</span>
+                            <span class="help-block col-sm-4 text-justify">As much as possible, copy and paste the official synopsis released by the anime's artists/production companies, and not your own thoughts on the anime. This will help verify the authenticity and accuracy of your submissions, as well as help other users find it.</span>
                         </div>
                         <div class="form-group">
                             <label for="animeInputImage" class="col-sm-2 control-label">Image*</label>
@@ -170,14 +170,14 @@
                                 ?>
                                 <input type="file" name="userfile" size="20"/>
                             </div>
-                            <span class="help-block col-sm-4">Please upload the anime's release poster (or other official promotional artwork by the artists/production companies), rather than a screenshot of the anime. This will help users and the system verify the authenticity of the anime.</span>
+                            <span class="help-block col-sm-4 text-justify">Please upload the anime's release poster (or other official promotional artwork by the artists/production companies), rather than a screenshot of the anime. This will help users and the system verify the authenticity of the anime.</span>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label"></label>
                             <div class="col-sm-6">
-                                <button class="btn btn-primary pull-right" type="submit">Submit</button>
+                                <button class="btn btn-success pull-right" type="submit">Submit</button>
                             </div>
-                            <span class="help-block col-sm-4">Please review the accuracy and authenticity of all fields before submitting.</span>
+                            <span class="help-block col-sm-4 text-justify">Please review the accuracy and authenticity of all fields before submitting.</span>
                         </div>
                     </div>
                 </div>
