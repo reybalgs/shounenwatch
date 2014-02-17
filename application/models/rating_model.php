@@ -4,6 +4,23 @@ class Rating_model extends CI_Model {
         $this->load->database();
     }
     
+    public function get_rating_average($ratings) {
+        # Returns the average (on a scale of .5s) of the given array of ratings.
+        $ratings_count = count($ratings);
+        $total_ratings = 0;
+        
+        # Add all the ratings together
+        foreach($ratings as $rating) {
+            $total_ratings += $rating['rating'];
+        }
+        
+        # Get the average
+        $total_ratings = $total_ratings / ($ratings_count * 1.0);
+        
+        # Round by the nearest .5
+        return round($total_ratings, 1);
+    }
+    
     public function get_all_ratings() {
         # Function that gets all rating rows
         $this->db->select('user.id as userID, user.username, anime.id as animeID, anime.name, rating.id as ratingID, rating.rating');
