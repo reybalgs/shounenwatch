@@ -31,7 +31,7 @@
 </head>
 <body style="padding-top: 80px">
 <!-- Navbar goes here -->
-<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+<div class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -40,7 +40,9 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="<?php echo base_url('') ?>">ShounenWatch!</a>
+      <a class="brand" href="<?php echo base_url('') ?>">
+        <img class="im-nav-logo" height="48x" src="<?php echo base_url('static').'/'.'shounenwatch.png' ?>"/>
+      </a>
     </div>
     <div id="navbar-items" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -57,14 +59,12 @@
         <?php
             }
         ?>
-        <li><a href="#about">About</a></li>
-        <li><a href="#contact">Contact</a></li>
       </ul>
       <form class="navbar-form navbar-left" role="search">
         <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search for badass anime!">
+          <input type="text" class="form-control" placeholder="Search">
         </div>
-        <button type="submit" class="btn btn-default">Submit</button>
+        <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
       </form>
       <ul class="nav navbar-nav navbar-right">
         <?php
@@ -74,11 +74,15 @@
             if($this->session->userdata('username')) {
         ?>
         <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $this->session->userdata('username')?> <b class="caret"></b></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-user"></i>
+                <?php echo $this->session->userdata('username')?>
+                <b class="caret"></b>
+            </a>
             <ul class="dropdown-menu">
-                <li><a href="<?php echo site_url('user/profile').'/'.$this->session->userdata('username')?>">View Profile</a></li>
-                <li><a href="#">Submissions</a></li>
-                <li><a href="<?php echo site_url('anime/submit') ?>">Submit New Anime</a></li>
+                <li><a href="<?php echo site_url('user/profile').'/'.$this->session->userdata('username')?>"><i class="fa fa-user"></i> View Profile</a></li>
+                <li><a href="<?php echo site_url('user/manage_watchlist').'/'.$this->session->userdata('user_id')?>"><i class="fa fa-play-circle"></i> Your Watchlist</a></li>
+                <li><a href="<?php echo site_url('anime/submit') ?>"><i class="fa fa-plus"></i> Submit New Anime</a></li>
                 <li class="divider"></li>
                 <li><a href="<?php echo site_url('user/logout') ?>">Logout</a></li>
             </ul>

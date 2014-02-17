@@ -27,10 +27,17 @@ class User_model extends CI_Model{
         $values = array(
             'username'=>$username,
             'email'=>$email,
-            'password'=>hash('sha256', $password)
+            'password'=>hash('sha256', $password),
+            'active'=>1
         );
         
         return $this->db->insert('user', $values);
+    }
+    
+    public function make_inactive($user_id) {
+        # Makes the provided user inactive, blocking access to their profile.
+        $this->db->where('id', $user_id);
+        return $this->db->update('user', array('active'=>0));
     }
     
     public function edit_user($id, $data) {
@@ -43,7 +50,7 @@ class User_model extends CI_Model{
     public function authenticate_user($username, $password) {
         # Authenticates the username, along with the password, provided above.
         $query = $this->db->get_where('user', array("username"=>$username,
-            "password"=>hash("sha256", $password)));
+            "password"=>hash("sha256", $password), "active"=>1));
         $result = $query->result_array();
         if(empty($result)) {
             # Result is empty, user is not authenticated

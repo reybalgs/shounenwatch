@@ -8,6 +8,8 @@ class Anime extends CI_Controller {
         parent::__construct();
         $this->load->model('anime_model');
         $this->load->model('user_model');
+        $this->load->model('watching_model');
+        $this->load->model('rating_model');
     }
     
     public function detail($anime_id, $submit_success = NULL,
@@ -15,15 +17,81 @@ class Anime extends CI_Controller {
         # Displays anime based on the passed ID.
         # First we need to load the anime from the database.
         $anime = $this->anime_model->get_anime($anime_id);
-        $user = $this->user_model->get_user_id($anime->userID);
+        $submitter = $this->user_model->get_user_id($anime->userID);
+        $logged_in_user = $this->user_model->get_user($this->session->userdata('username'));
+        $watching = $this->watching_model->check_if_watching($logged_in_user->id, $anime_id);
+        $ratings = $this->rating_model->get_all_ratings_from_anime($anime_id);
+        $rating = $this->rating_model->get_rating_average($ratings);
         
         $data['anime'] = $anime;
-        $data['user'] = $user;
+        $data['ratings'] = $ratings;
+        $data['rating'] = $rating;
+        $data['submitter'] = $submitter;
+        $data['logged_in_user'] = $logged_in_user;
         $data['title'] = $anime->name;
+        $data['watching'] = $watching;
         
         $this->load->view('templates/header', $data);
         $this->load->view('anime/detail', $data);
         $this->load->view('templates/footer');
+    }
+ 
+    public function add_to_watchlist($anime_id) {
+        # Adds the given anime to the given user's watch list.
+        $anime = $this->anime_model->get_anime($anime_id);
+        $user = $this->user_model->get_user($this->session->userdata('username'));
+        
+        $data['title'] = 'Added to watchlist';
+        $data['anime'] = $anime;
+        $data['user'] = $user;
+        
+        $this->watching_model->add_anime_to_user_watchlist($anime_id, $user->id);
+        
+        $this->detail($anime_id);
+    }
+    
+    public function remove_from_watchlist($anime_id) {
+        # Removes the given anime from the given user's watch list.
+        $anime = $this->anime_model->get_anime($anime_id);
+        $user = $this->user_model->get_user($this->session->userdata('username'));
+        
+        $data['title'] = 'Added to watchlist';
+        $data['anime'] = $anime;
+        $data['user'] = $user;
+        
+        $this->watching_model->remove_anime_from_user_watchlist($anime_id, $user->id);
+        
+        $this->detail($anime_id);
+    }
+    
+    public function delete($anime_id) {
+        # Deletes or makes inactive the given anime.
+        # First, let's see if the anime has any viewers
+        $viewers = count($this->watching_model->get_watching_anime($anime_id));
+        
+        if($viewers) {
+            # This anime has viewers, we can only make it inactive.
+            $this->anime_model->make_anime_inactive($anime_id);
+            
+            # Go back to the anime's page.
+            $this->detail($anime_id);
+        }
+        else {
+            # This anime has no viewers, we can safely delete it from the
+            # database
+            $this->anime_model->delete_anime($anime_id);
+            
+            # Go to a page containing all anime.
+            $this->index();
+        }
+    }
+    
+    public function restore($anime_id) {
+        # Restores the currently inactive anime.
+        $this->anime_model->make_anime_active($anime_id);
+        
+        # Go back to the anime's page.
+        $this->detail($anime_id);
     }
     
     public function submit() {
@@ -66,7 +134,7 @@ class Anime extends CI_Controller {
             # Config files for uploading anime images
             $config['upload_path'] = './upload/anime/';
             # Shorten the title into 24 chars most
-            $config['file_name'] = substr($title, 0, 24).'.jpg';
+            $config['file_name'] = substr($title, 0, 64).'.jpg';
             $config['allowed_types'] = 'gif|jpg|png|jpeg';
             $config['max_size']	= '2048';
             $config['max_width']  = '4096';
@@ -89,6 +157,7 @@ class Anime extends CI_Controller {
                     'synopsis'=>$synopsis,
                     'episodes'=>$episodes,
                     'airing'=>$airing,
+                    'active'=>1,
                     'image'=>$upload_data['file_name']
                 );
             }
@@ -99,6 +168,7 @@ class Anime extends CI_Controller {
                     'synopsis'=>$synopsis,
                     'episodes'=>$episodes,
                     'airing'=>$airing,
+                    'active'=>1
                 );
             }
             
@@ -190,7 +260,7 @@ class Anime extends CI_Controller {
             # Config files for uploading anime images
             $config['upload_path'] = './upload/anime/';
             # Shorten the title into 24 chars most
-            $config['file_name'] = substr($title, 0, 24).'.jpg';
+            $config['file_name'] = substr($title, 0, 64).'.jpg';
             $config['allowed_types'] = 'gif|jpg|png|jpeg';
             $config['max_size']	= '2048';
             $config['max_width']  = '4096';

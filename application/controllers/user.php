@@ -9,6 +9,8 @@ class User extends CI_Controller {
         parent::__construct();
         $this->load->model('user_model');
         $this->load->model('anime_model');
+        $this->load->model('watching_model');
+        $this->load->model('rating_model');
     }
     
     public function index() {
@@ -20,23 +22,132 @@ class User extends CI_Controller {
         $this->load->view('templates/footer');
     }
     
+    public function episodeCheck($anime, $episode_input) {
+        # Checks whether or not the input is correct for the anime given
+        if($anime['episodes'] > 0) {
+            # If the total episodes are known, currEpisode cannot exceed
+            # this value
+            if($episode_input > $anime['episodes']) {
+                return FALSE;
+            }
+        }
+    }
+    
+    public function manage_watchlist($user_id) {
+        $this->load->helper('form');
+        $this->load->library('form_validation');
+        # Manages the watchlist of the given user.
+        
+        # Get the user and their watchlist
+        $user = $this->user_model->get_user_id($user_id);
+        $watchlist = $this->watching_model->get_watching_from_user($user_id);
+        $watchlist_count = count($watchlist);
+        
+        # Put them into the data superarray
+        $data['user'] = $user;
+        $data['watchlist'] = $watchlist;
+        $data['title'] = 'Manage Your Watchlist';
+        $data['done'] = FALSE;
+        
+        # Create validation rules
+        for($i = 0; $i < $watchlist_count; $i++) {
+            $anime = $watchlist[$i];
+            if($anime['episodes'] > 0) {
+                # If the total episodes are known, currEpisode cannot exceed
+                # this value
+                $episodes = $anime['episodes'] + 1;
+                $this->form_validation->set_rules('epInput'.$i, $anime['name'].' current episode',
+                                                  "required|less_than[$episodes]|is_natural_no_zero");
+            }
+            else {
+                # Episodes are unknown, currEpisode can be any value greater than 0
+                $this->form_validation->set_rules('epInput'.$i, $anime['name'].' current episode',
+                                                  "required|is_natural_no_zero");
+            }
+        }
+        
+        if($this->form_validation->run() == FALSE) {
+            $this->load->view('templates/header', $data);
+            $this->load->view('user/manage_watchlist', $data);
+            $this->load->view('templates/footer');
+        }
+        else {
+            # Initialize an array where we will be putting post values
+            $episodes_array = array();
+            
+            for($i = 0; $i < $watchlist_count; $i++) {
+                # DEBUG log message
+                $input = $this->input->post('epInput'.$i);
+                log_message('debug', 'epInput'.$i.' content: '.$this->input->post('epInput'.$i));
+                if($input == '') {
+                    log_message('debug', 'epInput'.$i.' is NULL!');
+                }
+                else {
+                    log_message('debug', 'epInput'.$i.' is set to '.$input.', setting episode of '.$watchlist[$i]['name'].' to input');
+                    $episodes_array[] = $this->input->post('epInput'.$i);
+                }
+            }
+            
+            # For every anime in the watchlist, modify their watching values
+            if(!(empty($episodes_array))) {
+                $i = 0;
+                foreach($watchlist as $anime) {
+                    $anime['currentEpisode'] = $episodes_array[$i];
+                    $this->watching_model->set_watching_episode($anime['watchingID'], $episodes_array[$i]);
+                    $i = $i + 1;
+                }
+            }
+            
+            $data['watchlist'] = $this->watching_model->get_watching_from_user($user_id);
+            $data['done'] = TRUE;
+            
+            $this->load->view('templates/header', $data);
+            $this->load->view('user/manage_watchlist', $data);
+            $this->load->view('templates/footer');
+        }
+    }
+    
+    public function delete($user_id) {
+        # Deletes the given user by making them inactive, as well as all the
+        # anime they have submitted.
+        
+        # Get all the anime this user has submitted.
+        $user_anime = $this->anime_model->get_anime_from_user($user_id);
+        
+        foreach($user_anime as $anime) {
+            # Make each anime inactive
+            $this->anime_model->make_anime_inactive($anime['id']);
+        }
+        
+        # Make the user's profile inactive
+        $this->user_model->make_inactive($user_id);
+        
+        # Log the user out
+        $this->logout();
+    }
+    
     public function profile($username) {
         # Loads the user profile page based on the user passed as an argument.
         $user = $this->user_model->get_user($username);
         # Load all the anime submitted by the user
         $anime = $this->anime_model->get_anime_from_user($user->id);
+        # Load the user's watchlist
+        $watchlist = $this->watching_model->get_watching_from_user($user->id);
         
         $data['title'] = $user->username."'s"." profile";
         
         # Load important user data into data superarray
+        $data['user'] = $user;
         $data['username'] = $user->username;
         $data['email'] = $user->email;
         $data['about'] = $user->about;
         $data['image'] = $user->image;
         $data['anime'] = $anime;
+        $data['watchlist'] = $watchlist;
         
         $this->load->view('templates/header', $data);
         $this->load->view('user/profile', $data);
+        #$this->load->view('tests/tabs', $data);
         $this->load->view('templates/footer');
     }
     
@@ -170,6 +281,7 @@ class User extends CI_Controller {
                 # Put user data into session so we can track them
                 $user = $this->user_model->get_user($username_input);
                 $userdata = array('username'=>$user->username,
+                                  'user_id'=>$user->id,
                                   'logged_in'=>TRUE);
                 $this->session->set_userdata($userdata);
                 
