@@ -48,24 +48,19 @@
       <ul class="nav navbar-nav">
         <?php
             # If we are logged in, home link should take us to anime list
-            if($this->session->userdata('username')) {
+            if($this->session->userdata('logged_in')) {
         ?>
-        <li class="active"><a href="<?php echo site_url('anime')?>"><span class="glyphicon glyphicon-home"></span></a></li>
+        <li class="active"><a href="<?php echo site_url('anime')?>"><i class="fa fa-home"></i> Home</a></li>
         <?php
             }
             else {
         ?>
-        <li class="active"><a href="<?php echo base_url('')?>"><span class="glyphicon glyphicon-home"></span></a></li>
+        <li class="active"><a href="<?php echo base_url('')?>"><i class="fa fa-home"></i> Home</a></li>
         <?php
             }
         ?>
+        <li><a href="#"><i class="fa fa-bars"></i> Browse</a></li>
       </ul>
-      <form class="navbar-form navbar-left" role="search">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search">
-        </div>
-        <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-      </form>
       <ul class="nav navbar-nav navbar-right">
         <?php
             # Check if the user is logged in.

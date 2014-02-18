@@ -143,6 +143,7 @@
                             <i class="fa fa-star"></i>
                         </a></li>
                     </ul>
+                    <button type="button" class="btn btn-warning"><i class="fa fa-exclamation-circle"></i> Report Anime</button>
                 </div>
             <?php
             }
