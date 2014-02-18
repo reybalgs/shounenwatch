@@ -41,6 +41,9 @@
 # Test routes
 $route['test/tabs'] = "user/tabs_test";
 
+# Admin routes
+$route['admin/panel'] = "admin/index";
+
 # Reports routes
 $route['reports/get_report/(:num)'] = "reports/get_report/$1";
 $route['reports'] = "reports/index";

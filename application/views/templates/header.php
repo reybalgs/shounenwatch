@@ -78,6 +78,13 @@
                 <li><a href="<?php echo site_url('user/profile').'/'.$this->session->userdata('username')?>"><i class="fa fa-user"></i> View Profile</a></li>
                 <li><a href="<?php echo site_url('user/manage_watchlist').'/'.$this->session->userdata('user_id')?>"><i class="fa fa-play-circle"></i> Your Watchlist</a></li>
                 <li><a href="<?php echo site_url('anime/submit') ?>"><i class="fa fa-plus"></i> Submit New Anime</a></li>
+                <?php
+                if($this->session->userdata('user_id') == 1) {
+                ?>
+                <li><a href="<?php echo site_url('admin/panel') ?>"><i class="fa fa-wrench"></i> Admin Panel</a></li>
+                <?php
+                }
+                ?>
                 <li class="divider"></li>
                 <li><a href="<?php echo site_url('user/logout') ?>">Logout</a></li>
             </ul>
