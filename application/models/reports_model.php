@@ -4,6 +4,15 @@ class Reports_model extends CI_Model {
         $this->load->database();
     }
     
+    public function remove_report($id) {
+        $this->db->where('id', $id);
+        return $this->db->delete('reports');
+    }
+    
+    public function set_report($data) {
+        return $this->db->insert('reports', $data);
+    }
+    
     public function get_all_reports_from_anime($anime_id) {
         # Gets all reports on a given anime.
         $this->db->select('reports.id as reportID, user.id as userID, user.username, anime.id as animeID, anime.name, comment');

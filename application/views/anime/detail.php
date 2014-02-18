@@ -143,11 +143,36 @@
                             <i class="fa fa-star"></i>
                         </a></li>
                     </ul>
-                    <button type="button" class="btn btn-warning"><i class="fa fa-exclamation-circle"></i> Report Anime</button>
+                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#reportModal"><i class="fa fa-exclamation-circle"></i> Report Anime</button>
                 </div>
             <?php
             }
             ?>
+        </div>
+    </div>
+</div>
+
+<?php # Report anime modal ?>
+<div class="modal fade" id="reportModal" role="dialog" aria-labelledby="reportModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i></button>
+                <h3 class="modal-title" id="reportModalLabel">Report this anime</h3>
+            </div>
+            <div class="modal-body">
+                <h4>You are reporting: <strong><?php echo $anime->name ?></strong></h4>
+                <p>Report this anime if you think it violates ShounenWatch's rules and regulations on submissions.</p>
+                <?php echo form_open('reports/get_report'.'/'.$anime->id, array('class'=>'form-horizontal', 'role'=>'form')) ?>
+                    <div class="form-group">
+                        <label for="reportComment" class="col-xs-2 control-label">Comment*</label>
+                        <div class="col-xs-10">
+                            <textarea class="form-control" name="report-comment" id="reportComment" rows="10"></textarea>
+                            <span class="help-block">Tell us why you are reporting this anime. Please be clear and reasonable.</span>
+                        </div>
+                    </div>
+                <button class="btn btn-success btn-block" type="submit"><i class="fa fa-check"></i> Submit!</button>
+            </div>
         </div>
     </div>
 </div>

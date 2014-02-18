@@ -42,6 +42,7 @@
 $route['test/tabs'] = "user/tabs_test";
 
 # Reports routes
+$route['reports/get_report/(:num)'] = "reports/get_report/$1";
 $route['reports'] = "reports/index";
 
 # Rating routes
