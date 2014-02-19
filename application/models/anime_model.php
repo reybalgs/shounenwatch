@@ -5,6 +5,15 @@ class Anime_model extends CI_Model{
         $this->load->database();
     }
     
+    public function count_all_anime_from_user($user_id) {
+        # Counts all anime submitted by a given user.
+        $this->db->select('anime.id, name, anime.image, airing, synopsis, episodes, anime.active');
+        $this->db->from('anime');
+        $this->db->join('user', 'user.id = anime.userID');
+        $this->db->where('anime.userID', $user_id);
+        return $this->db->count_all_results();
+    }
+    
     public function count_all_anime() {
         # Counts all anime in the database and returns the count as a result.
         return $this->db->count_all('anime');
@@ -76,12 +85,20 @@ class Anime_model extends CI_Model{
         return $query->row();
     }
     
-    public function get_anime_from_user($user_id) {
+    public function get_anime_from_user($user_id, $limit = NULL, $start = NULL,
+                                        $with_inactives = FALSE) {
         # Gets all anime submitted by the user passed as an argument.
         $this->db->select('anime.id, name, anime.image, airing, synopsis, episodes, anime.active');
         $this->db->from('anime');
         $this->db->join('user', 'user.id = anime.userID');
         $this->db->where('anime.userID', $user_id);
+        if(!($with_inactives)) {
+            $this->db->where('anime.active', 1);
+        }
+        
+        if(!(is_null($limit) and is_null($start))) {
+            $this->db->limit($limit, $start);
+        }
         
         $query = $this->db->get();
         return $query->result_array();

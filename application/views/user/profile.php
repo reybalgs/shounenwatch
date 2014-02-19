@@ -83,6 +83,7 @@
                     <?php
                         }
                         else {
+                            $end_anime = end($anime);
                             $i = 1;
                             foreach($anime as $submission):
                             if($submission['active']) {
@@ -130,7 +131,7 @@
                         }
                         else {
                             $i = $i + 1;
-                            if(!(next($anime))) {
+                            if($end_anime['id'] == $submission['id']) {
                                 # There aren't any more anime next to list
                     ?>
             </div>
@@ -143,6 +144,7 @@
                         endforeach;
                         }
                     ?>
+            <?php echo $links ?>
                 </div>
             </div>
             <div class="panel panel-default">

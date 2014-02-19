@@ -11,6 +11,7 @@ class User extends CI_Controller {
         $this->load->model('anime_model');
         $this->load->model('watching_model');
         $this->load->model('rating_model');
+        $this->load->library('pagination');
     }
     
     public function index() {
@@ -129,12 +130,45 @@ class User extends CI_Controller {
     public function profile($username) {
         # Loads the user profile page based on the user passed as an argument.
         $user = $this->user_model->get_user($username);
-        # Load all the anime submitted by the user
-        $anime = $this->anime_model->get_anime_from_user($user->id);
         # Load the user's watchlist
         $watchlist = $this->watching_model->get_watching_from_user($user->id);
         
+        $config = array(
+            "base_url"=>site_url('user/profile').'/'.$username,
+            "total_rows"=>$this->anime_model->count_all_anime_from_user($user->id),
+            "per_page"=>6,
+            "uri_segment"=>4,
+            "full_tag_open"=>'<ul class="pagination pagination-lg">',
+            "full_tag_close"=>'<ul>',
+            "cur_tag_open"=>'<li class="active"><a href="#">',
+            "cur_tag_close"=>'</li>',
+            "num_tag_open"=>'<li>',
+            "num_tag_close"=>'</a></li>',
+            "first_link"=>'<i class="fa fa-angle-double-left"></i> First',
+            "first_tag_open"=>'<li>',
+            "first_tag_close"=>'</li>',
+            "last_link"=>'Last <i class="fa fa-angle-double-right"></i>',
+            "last_tag_open"=>'<li>',
+            "last_tag_close"=>'</li>',
+            "next_link"=>'Next',
+            "next_tag_open"=>'<li>',
+            "next_tag_close"=>'</li>',
+            "prev_link"=>'Prev',
+            "prev_tag_open"=>'<li>',
+            "prev_tag_close"=>'</li>'
+        );
+        
+        # Initialize pagination library
+        $this->pagination->initialize($config);
+        
+        # If there's a number in 3rd URI segment, use that, otherwise use 0
+        $page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        
+        # Load all the anime submitted by the user
+        $anime = $this->anime_model->get_anime_from_user($user->id, $config['per_page'], $page);
+        
         $data['title'] = $user->username."'s"." profile";
+        $data['links'] = $this->pagination->create_links();
         
         # Load important user data into data superarray
         $data['user'] = $user;
@@ -352,7 +386,8 @@ class User extends CI_Controller {
             # Log the user in by creating a session ID
             $userdata = array(
                 'username'=>$newuser->username,
-                'logged_in'=>TRUE
+                'logged_in'=>TRUE,
+                'user_id'=>$newuser->id
             );
             
             $this->session->set_userdata($userdata);

@@ -5,6 +5,11 @@ class User_model extends CI_Model{
         $this->load->database();
     }
     
+    public function count_all_users() {
+        # Gets a count of all user rows and returns the count as a result.
+        return $this->db->count_all('user');
+    }
+    
     public function get_users() {
         # Function that gets all users
         $query = $this->db->get('user');
