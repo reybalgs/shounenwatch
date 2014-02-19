@@ -41,6 +41,13 @@
 # Test routes
 $route['test/tabs'] = "user/tabs_test";
 
+# Admin routes
+$route['admin/panel'] = "admin/index";
+
+# Reports routes
+$route['reports/get_report/(:num)'] = "reports/get_report/$1";
+$route['reports'] = "reports/index";
+
 # Rating routes
 $route['rating/set/(:num)/(:num)/(:num)'] = "rating/set_anime_rating/$1/$2/$3";
 $route['rating/remove/(:num)/(:num)'] = "rating/remove_rating/$1/$2";
@@ -59,6 +66,7 @@ $route['anime/delete/(:num)'] = "anime/delete/$1";
 $route['anime/submit'] = "anime/submit";
 $route['anime/edit/(:num)'] = "anime/edit/$1";
 $route['anime/(:num)'] = "anime/detail/$1";
+$route['anime/browse/(:any)'] = "anime/browse/$1";
 $route['anime'] = "anime/index";
 
 # User routes

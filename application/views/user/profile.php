@@ -83,6 +83,7 @@
                     <?php
                         }
                         else {
+                            $end_anime = end($anime);
                             $i = 1;
                             foreach($anime as $submission):
                             if($submission['active']) {
@@ -116,9 +117,9 @@
                                 <a href="<?php echo site_url('anime').'/'.$submission['id'] ?>">
                                     <h4><?php echo $submission['name'] ?></h4>
                                 </a>
-                                <p class="text-muted"><i class="fa fa-video-camera"></i> Aired <?php echo mdate("%M %d %Y", mysql_to_unix($submission['airing'])) ?></p>
+                                <p class="text-muted"><i class="fa fa-calendar"></i> Aired <?php echo mdate("%M %d %Y", mysql_to_unix($submission['airing'])) ?></p>
                                 <p class="text-muted"><i class="fa fa-users"></i> <?php echo number_format(count($this->watching_model->get_watching_anime($submission['id']))) ?> viewers</p>
-                                <p class="text-muted">Rating: <?php echo $this->rating_model->get_rating_stars($this->rating_model->get_rating_average($this->rating_model->get_all_ratings_from_anime($submission['id']))) ?></p>
+                                <p class="text-muted">Rating: <?php echo $this->rating_model->get_rating_stars($this->rating_model->get_rating_average($this->rating_model->get_all_ratings_from_anime($submission['id']))) ?> (<?php echo count($this->rating_model->get_all_ratings_from_anime($submission['id'])) ?>)</p>
                             </div>
                         </div>
                     <?php
@@ -130,7 +131,7 @@
                         }
                         else {
                             $i = $i + 1;
-                            if(!(next($anime))) {
+                            if($end_anime['id'] == $submission['id']) {
                                 # There aren't any more anime next to list
                     ?>
             </div>
@@ -143,6 +144,7 @@
                         endforeach;
                         }
                     ?>
+            <?php echo $links ?>
                 </div>
             </div>
             <div class="panel panel-default">

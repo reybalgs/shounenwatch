@@ -70,11 +70,21 @@ class Rating_model extends CI_Model {
             $total_ratings = $total_ratings / ($ratings_count * 1.0);
             
             # Round by the nearest .5
-            return round($total_ratings, 1);
+            return round($total_ratings, 2);
         }
         else {
             return 0.0;
         }
+    }
+    
+    public function count_anime_ratings($anime_id) {
+        # Counts the number of ratings for the given anime.
+        $this->db->select('anime.id, anime.name, rating.id, rating.rating');
+        $this->db->from('anime');
+        $this->db->join('rating', 'anime.id = rating.animeID');
+        $this->db->where('rating.id', $anime_id);
+        
+        return $this->db->count_all_results();
     }
     
     public function get_all_ratings() {
@@ -110,6 +120,17 @@ class Rating_model extends CI_Model {
         
         $query = $this->db->get();
         return $query->result_array();
+    }
+    
+    public function get_anime_ratings_average($anime_id) {
+        # Gets the average rating of the given anime.
+        $this->db->select('anime.id as animeID, anime.name, rating.id as ratingID, (SELECT FORMAT(AVG(rating.rating), 2) as avgrating FROM rating WHERE rating.animeID = anime.id) as rating_average', FALSE);
+        $this->db->from('anime');
+        $this->db->join('rating', 'anime.id = rating.animeID');
+        $this->db->where('rating.animeID', $anime_id);
+        
+        $query = $this->db->get();
+        return $query->row();
     }
     
     public function get_all_ratings_from_anime($anime_id) {
