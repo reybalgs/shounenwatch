@@ -59,7 +59,7 @@
         <?php
             }
         ?>
-        <li><a href="<?php echo site_url('anime/browse') ?>"><i class="fa fa-bars"></i> Browse</a></li>
+        <li><a href="<?php echo site_url('anime/browse/all') ?>"><i class="fa fa-bars"></i> Browse</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <?php

@@ -53,7 +53,7 @@ class Anime_model extends CI_Model{
         return $this->db->update('anime', array('active'=>1));
     }
     
-    public function get_all_anime($limit = NULL, $start = NULL, $with_inactives = FALSE) {
+    public function get_all_anime($limit = NULL, $start = NULL, $alphabetical = FALSE, $with_inactives = FALSE) {
         # Gets all anime from the database and returns them in an array
         # Accepts two parameters, a limit for the number of rows returned and an
         # offset to start the results query from
@@ -64,6 +64,9 @@ class Anime_model extends CI_Model{
         $this->db->join('user', 'user.id = anime.userID');
         if(!($with_inactives)) {
             $this->db->where('anime.active', 1);
+        }
+        if($alphabetical) {
+            $this->db->order_by('name', 'asc');
         }
         
         if(!(is_null($limit) and is_null($start))) {

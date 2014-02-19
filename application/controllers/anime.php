@@ -13,13 +13,13 @@ class Anime extends CI_Controller {
         $this->load->library('pagination');
     }
     
-    public function browse() {
+    public function browse($type) {
         # Displays all the anime in a paginated list.
         $config = array(
-            "base_url"=>site_url('anime/browse'),
+            "base_url"=>site_url('anime/browse/all'),
             "total_rows"=>$this->anime_model->count_all_anime(),
             "per_page"=>12,
-            "uri_segment"=>3,
+            "uri_segment"=>4,
             "full_tag_open"=>'<ul class="pagination pagination-lg">',
             "full_tag_close"=>'<ul>',
             "cur_tag_open"=>'<li class="active"><a href="#">',
@@ -44,9 +44,11 @@ class Anime extends CI_Controller {
         $this->pagination->initialize($config);
         
         # If there's a number in 3rd URI segment, use that, otherwise use 0
-        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $page = ($this->uri->segment($config['uri_segment'])) ? $this->uri->segment($config['uri_segment']) : 0;
         
-        $data['anime_list'] = $this->anime_model->get_all_anime($config['per_page'], $page);
+        if($type == 'all') {
+            $data['anime_list'] = $this->anime_model->get_all_anime($config['per_page'], $page, TRUE);
+        }
         $data['links'] = $this->pagination->create_links();
         $data['title'] = 'Browse Anime';
         
