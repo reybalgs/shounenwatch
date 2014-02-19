@@ -57,9 +57,9 @@
                 <a href="<?php echo site_url('anime').'/'.$anime['id'] ?>">
                     <h4><?php echo $anime['name'] ?></h4>
                 </a>
-                <p class="text-muted"><i class="fa fa-video-camera"></i> Aired <?php echo mdate("%M %d %Y", mysql_to_unix($anime['airing'])) ?></p>
-                <p class="text-muted"><i ckass="fa fa-users"></i> <?php echo number_format(count($this->watching_model->get_watching_anime($anime['id']))) ?> viewers</p>
-                <p class="text-muted">Rating: <?php echo $this->rating_model->get_rating_stars($this->rating_model->get_rating_average($this->rating_model->get_all_ratings_from_anime($anime['id']))) ?></p>
+                <p class="text-muted"><i class="fa fa-calendar"></i> Aired <?php echo mdate("%M %d %Y", mysql_to_unix($anime['airing'])) ?></p>
+                <p class="text-muted"><i class="fa fa-users"></i> <?php echo number_format(count($this->watching_model->get_watching_anime($anime['id']))) ?> viewers</p>
+                <p class="text-muted">Rating: <?php echo $this->rating_model->get_rating_stars($this->rating_model->get_rating_average($this->rating_model->get_all_ratings_from_anime($anime['id']))) ?> <?php echo $this->rating_model->get_rating_average($this->rating_model->get_all_ratings_from_anime($anime['id'])) ?> (<?php echo count($this->rating_model->get_all_ratings_from_anime($anime['id'])) ?>)</p>
             </div>
         </div>
     <?php
