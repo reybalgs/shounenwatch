@@ -10,6 +10,43 @@ class Anime extends CI_Controller {
         $this->load->model('user_model');
         $this->load->model('watching_model');
         $this->load->model('rating_model');
+        $this->load->library('pagination');
+    }
+    
+    public function browse() {
+        # Displays all the anime in a paginated list.
+        $config = array(
+            "base_url"=>site_url('anime/browse'),
+            "total_rows"=>$this->anime_model->count_all_anime(),
+            "per_page"=>12,
+            "uri_segment"=>3,
+            "full_tag_open"=>'<ul class="pagination pagination-lg">',
+            "full_tag_close"=>'<ul>',
+            "cur_tag_open"=>'<li><a href="#">',
+            "cur_tag_close"=>'</li>',
+            "num_tag_open"=>'<li>',
+            "num_tag_close"=>'</a></li>',
+            "next_link"=>'Next',
+            "next_tag_open"=>'<li>',
+            "next_tag_close"=>'</li>',
+            "prev_link"=>'Prev',
+            "prev_tag_open"=>'<li>',
+            "prev_tag_close"=>'</li>'
+        );
+        
+        # Inititalize pagination library
+        $this->pagination->initialize($config);
+        
+        # If there's a number in 3rd URI segment, use that, otherwise use 0
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        
+        $data['anime_list'] = $this->anime_model->get_all_anime($config['per_page'], $page);
+        $data['links'] = $this->pagination->create_links();
+        $data['title'] = 'Browse Anime';
+        
+        $this->load->view('templates/header', $data);
+        $this->load->view('anime/browse', $data);
+        $this->load->view('templates/footer');
     }
     
     public function detail($anime_id, $submit_success = NULL,

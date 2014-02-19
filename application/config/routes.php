@@ -66,6 +66,7 @@ $route['anime/delete/(:num)'] = "anime/delete/$1";
 $route['anime/submit'] = "anime/submit";
 $route['anime/edit/(:num)'] = "anime/edit/$1";
 $route['anime/(:num)'] = "anime/detail/$1";
+$route['anime/browse'] = "anime/browse";
 $route['anime'] = "anime/index";
 
 # User routes
