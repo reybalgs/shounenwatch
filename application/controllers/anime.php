@@ -49,6 +49,11 @@ class Anime extends CI_Controller {
         if($type == 'all') {
             $data['anime_list'] = $this->anime_model->get_all_anime($config['per_page'], $page, TRUE);
         }
+        else if($type == 'watching') {
+            $data['anime_list'] = $this->anime_model->get_most_watched_anime($config['per_page'], $page, TRUE);
+        }
+        
+        $data['type'] = $type;
         $data['links'] = $this->pagination->create_links();
         $data['title'] = 'Browse Anime';
         

@@ -5,6 +5,40 @@ class Anime_model extends CI_Model{
         $this->load->database();
     }
     
+    public function get_most_watched_anime($limit = NULL, $start = NULL, $alphabetical = FALSE,
+                                           $reverse = FALSE, $with_inactives = FALSE) {
+        # Gets all anime, and sorts them in descending order according to
+        # the number of watching users.
+        # Has an optional parameter that reverses the ordering.
+        $this->db->select('anime.id, name, anime.image, airing, episodes, anime.active, (SELECT COUNT(watching.id) AS numwatching FROM watching WHERE watching.animeID = anime.id) AS watch_count');
+        $this->db->from('anime');
+        $this->db->join('user', 'user.id = anime.userID');
+        
+        # Filter the inactives, if not set to have them
+        if(!($with_inactives)) {
+            $this->db->where('anime.active', 1);
+        }
+        
+        # Reverse the order when necessary
+        if($reverse) {
+            $this->db->order_by('watch_count', 'asc');
+        }
+        else {
+            $this->db->order_by('watch_count', 'desc');
+        }
+        
+        if($alphabetical) {
+            $this->db->order_by('name', 'asc');
+        }
+        
+        # Limit the results if the parameters are given
+        if(!(is_null($limit) and is_null($start))) {
+            $this->db->limit($limit, $start);
+        }
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+    
     public function count_all_anime_from_user($user_id) {
         # Counts all anime submitted by a given user.
         $this->db->select('anime.id, name, anime.image, airing, synopsis, episodes, anime.active');

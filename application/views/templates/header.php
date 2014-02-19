@@ -60,6 +60,8 @@
             }
         ?>
         <li><a href="<?php echo site_url('anime/browse/all') ?>"><i class="fa fa-bars"></i> Browse</a></li>
+        <li><a href="<?php echo site_url('anime/browse/watching') ?>"><i class="fa fa-trophy"></i> Most Watched</a></li>
+        <li><a href="<?php echo site_url('anime/browse/rating') ?>"><i class="fa fa-star"></i> Top Rated</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <?php

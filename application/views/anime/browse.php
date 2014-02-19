@@ -1,9 +1,21 @@
 <div class="container">
+    <?php
+    if($type == 'all') {
+    ?>
     <h1 class="page-header">All anime</h1>
     <p>
         Below is a list of all anime submitted into the ShounenWatch service.
     </p>
     <?php
+    }
+    else {
+    ?>
+    <h1 class="page-header">Most Watched</h1>
+    <p>
+        Below is a list of the most watched anime in the ShounenWatch service, arranged in descending order.
+    </p>
+    <?php
+    }
     if(!(empty($anime_list))) {
         $i = 1;
         $end_anime = end($anime_list);
