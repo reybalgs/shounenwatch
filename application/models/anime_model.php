@@ -5,6 +5,39 @@ class Anime_model extends CI_Model{
         $this->load->database();
     }
     
+    public function get_highest_rated_anime($limit = NULL, $start = NULL, $alphabetical = FALSE,
+                                            $reverse = FALSE, $with_inactives = FALSE) {
+        # Gets all anime and sorts them in descending order according to their
+        # average ratings.
+        # This does not use the Bayesian average, so the results could be skewed.
+        $this->db->select('anime.id, name, anime.image, airing, episodes, anime.active, (SELECT AVG(rating.rating) AS avgrating FROM rating WHERE rating.animeID = anime.id) as average_rating, (SELECT COUNT(rating.id) as ratingcnt FROM rating WHERE rating.animeID = anime.id) as rating_count');
+        $this->db->from('anime');
+        
+        if(!($with_inactives)) {
+            $this->db->where('anime.active', 1);
+        }
+        
+        if($reverse) {
+            $this->db->order_by('average_rating', 'asc');
+            $this->db->order_by('rating_count', 'asc');
+        }
+        else {
+            $this->db->order_by('average_rating', 'desc');
+            $this->db->order_by('rating_count', 'desc');
+        }
+        
+        if($alphabetical) {
+            $this->db->order_by('name', 'asc');
+        }
+        
+        # Limit the results if the parameters are given
+        if(!(is_null($limit) and is_null($start))) {
+            $this->db->limit($limit, $start);
+        }
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+    
     public function get_most_watched_anime($limit = NULL, $start = NULL, $alphabetical = FALSE,
                                            $reverse = FALSE, $with_inactives = FALSE) {
         # Gets all anime, and sorts them in descending order according to

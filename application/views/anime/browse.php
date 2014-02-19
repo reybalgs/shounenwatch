@@ -8,7 +8,7 @@
     </p>
     <?php
     }
-    else {
+    else if($type == 'watching') {
     ?>
     <h1 class="page-header">Most Watched</h1>
     <p>
@@ -16,7 +16,15 @@
     </p>
     <?php
     }
-    if(!(empty($anime_list))) {
+    else if($type == 'rating') {
+    ?>
+    <h1 class="page-header">Highest Rated</h1>
+    <p>
+        Below is a list of the highest rated anime in the ShounenWatch service, arranged in descending order.
+    </p>
+    <?php
+    }
+        if(!(empty($anime_list))) {
         $i = 1;
         $end_anime = end($anime_list);
         foreach($anime_list as $anime) {

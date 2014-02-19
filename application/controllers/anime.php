@@ -52,6 +52,9 @@ class Anime extends CI_Controller {
         else if($type == 'watching') {
             $data['anime_list'] = $this->anime_model->get_most_watched_anime($config['per_page'], $page, TRUE);
         }
+        else if($type == 'rating') {
+            $data['anime_list'] = $this->anime_model->get_highest_rated_anime($config['per_page'], $page, TRUE);
+        }
         
         $data['type'] = $type;
         $data['links'] = $this->pagination->create_links();
