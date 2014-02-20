@@ -16,7 +16,6 @@ class Anime extends CI_Controller {
     public function browse($type) {
         # Displays all the anime in a paginated list.
         $config = array(
-            "base_url"=>site_url('anime/browse/all'),
             "total_rows"=>$this->anime_model->count_all_anime(),
             "per_page"=>12,
             "uri_segment"=>4,
@@ -39,6 +38,16 @@ class Anime extends CI_Controller {
             "prev_tag_open"=>'<li>',
             "prev_tag_close"=>'</li>'
         );
+        
+        if($type == 'all') {
+            $config['base_url'] = site_url('anime/browse/all');
+        }
+        else if($type == 'watching') {
+            $config['base_url'] = site_url('anime/browse/watching');
+        }
+        else if($type == 'rating') {
+            $config['base_url'] = site_url('anime/browse/rating');
+        }
         
         # Inititalize pagination library
         $this->pagination->initialize($config);
