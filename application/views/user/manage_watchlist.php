@@ -75,7 +75,7 @@
                 <div class="panel-body">
                     <h3>How to manage your watchlist</h3>
                     <p class="text-justify">
-                        To set the episode you're currently on in an anime, click its <strong>Current Episode</strong> box a field and type in your current episode there. Remember that you can only input a number within the number of episodes, but if the anime has an unknown number of episodes, you can put whatever you want here.
+                        To set the episode you're currently on in an anime, click its <strong>Current Episode</strong> field and type in your current episode there. Remember that you can only input a number within the number of episodes, but if the anime has an unknown number of episodes, you can put whatever you want here.
                     </p>
                     <h3>About your watchlist</h3>
                     <p class="text-justify">
