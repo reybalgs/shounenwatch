@@ -38,6 +38,33 @@ class Anime_model extends CI_Model{
         return $query->result_array();
     }
     
+    public function search_anime_title($search_term, $limit = NULL, $start = NULL,
+                                       $alphabetical = FALSE, $reverse = FALSE,
+                                       $with_inactives = FALSE) {
+        if(!(is_null($search_term))) {
+            # Searches for anime based on the title and the given search term.
+            # Uses a pretty loose wildcard (anything containing the given term)
+            $this->db->select('anime.id, name, username, anime.image, airing, synopsis, episodes, anime.active');
+            $this->db->from('anime');
+            $this->db->join('user', 'user.id = anime.userID');
+            if(!($with_inactives)) {
+                $this->db->where('anime.active', 1);
+            }
+            $this->db->like('name', $search_term);
+            
+            if($alphabetical) {
+                $this->db->order_by('name', 'asc');
+            }
+            
+            if(!(is_null($limit) and is_null($start))) {
+                $this->db->limit($limit, $start);
+            }
+            
+            $query = $this->db->get();
+            return $query->result_array();
+        }
+    }
+    
     public function get_most_watched_anime($limit = NULL, $start = NULL, $alphabetical = FALSE,
                                            $reverse = FALSE, $with_inactives = FALSE) {
         # Gets all anime, and sorts them in descending order according to

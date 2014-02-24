@@ -1,30 +1,38 @@
 <div class="container">
+    <h1 class="page-header">Search Anime</h1>
     <?php
-    if($type == 'all') {
+    if(validation_errors()) {
     ?>
-    <h1 class="page-header">All anime</h1>
-    <p>
-        Below is a list of all anime submitted into the ShounenWatch service.
-    </p>
+    <div class="alert alert-info">
+        <?php echo validation_errors() ?>
+    </div>
     <?php
     }
-    else if($type == 'watching') {
     ?>
-    <h1 class="page-header">Most Watched</h1>
-    <p>
-        Below is a list of the most watched anime in the ShounenWatch service, arranged in descending order.
-    </p>
+    <p class="text-muted">Enter the title of the anime you're looking for on the box below.</p>
+    <?php echo form_open(site_url('anime/search'), array("class"=>"form-inline", "role"=>"form")); ?>
+    <div class="input-group">
+        <?php
+        $search_input = array(
+            'name'=>'search-input',
+            'value'=>set_value('search-input'),
+            'class'=>'form-control',
+            'id'=>'searchInput',
+            'type'=>'text',
+            'placeholder'=>'Search'
+        );
+        echo form_input($search_input);
+        ?>
+        <span class="input-group-btn">
+            <button class="btn btn-success" type="submit"><i class="fa fa-search"></i></button>
+        </span>
+    </div>
+    <br/>
     <?php
-    }
-    else if($type == 'rating') {
+    if(!(is_null($anime_list))) {
     ?>
-    <h1 class="page-header">Highest Rated</h1>
-    <p>
-        Below is a list of the highest rated anime in the ShounenWatch service, arranged in descending order.
-    </p>
+    <p><strong><?php echo count($anime_list) ?></strong> results were found.</p>
     <?php
-    }
-        if(!(empty($anime_list))) {
         $i = 1;
         $end_anime = end($anime_list);
         foreach($anime_list as $anime) {
@@ -80,14 +88,16 @@
                 }
             }
         }
+        echo $links;
     }
-    else {
+    if($empty) {
     ?>
-    <h1><i class="fa fa-question-circle fa-5x"></i></h1>
-    <h3>Your search query returned no results.</h3>
-    <p>Please try again.</p>
+    <div class="col-xs-4 col-xs-offset-4 text-center">
+        <h1><i class="fa fa-question-circle fa-5x"></i></h1>
+        <h3>Sorry, no results were found!</h3>
+        <p>Please try again.</p>
+    </div>
     <?php
     }
     ?>
-    <?php echo $links ?>
 </div>

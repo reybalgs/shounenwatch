@@ -64,6 +64,7 @@ $route['anime/add_to_watchlist/(:num)/'] = "anime/add_anime_to_watch_list/$1";
 $route['anime/restore/(:num)'] = "anime/restore/$1";
 $route['anime/delete/(:num)'] = "anime/delete/$1";
 $route['anime/submit'] = "anime/submit";
+$route['anime/search'] = "anime/search";
 $route['anime/edit/(:num)'] = "anime/edit/$1";
 $route['anime/(:num)'] = "anime/detail/$1";
 $route['anime/browse/(:any)'] = "anime/browse/$1";
