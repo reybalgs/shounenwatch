@@ -178,3 +178,14 @@ ALTER TABLE `watching`
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+--
+-- Create an admin user
+-- 
+INSERT INTO user(
+    username, password, email, about)
+VALUES(
+    "admin",
+    "b493d48364afe44d11c0165cf470a4164d1e2609911ef998be868d46ade3de4e",
+    "admin@shounenwatch.com",
+    "I'm the number one badass around here!");
