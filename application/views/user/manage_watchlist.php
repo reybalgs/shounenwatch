@@ -27,7 +27,7 @@
                     </h1>
                 </div>
                 <div class="panel-body">
-                    <?php echo form_open('user/manage_watchlist'.'/'.$user->id, array(
+                    <?php echo form_open('user/manage_watchlist', array(
                         "role"=>"form"
                     )); ?>
                     <table class="table table-striped table-hover table-condensed table-bordered">

@@ -34,77 +34,83 @@ class User extends CI_Controller {
         }
     }
     
-    public function manage_watchlist($user_id) {
+    public function manage_watchlist() {
         $this->load->helper('form');
         $this->load->library('form_validation');
         # Manages the watchlist of the given user.
         
-        # Get the user and their watchlist
-        $user = $this->user_model->get_user_id($user_id);
-        $watchlist = $this->watching_model->get_watching_from_user($user_id);
-        $watchlist_count = count($watchlist);
-        
-        # Put them into the data superarray
-        $data['user'] = $user;
-        $data['watchlist'] = $watchlist;
-        $data['title'] = 'Manage Your Watchlist';
-        $data['done'] = FALSE;
-        
-        # Create validation rules
-        for($i = 0; $i < $watchlist_count; $i++) {
-            $anime = $watchlist[$i];
-            if($anime['episodes'] > 0) {
-                # If the total episodes are known, currEpisode cannot exceed
-                # this value
-                $episodes = $anime['episodes'] + 1;
-                $this->form_validation->set_rules('epInput'.$i, $anime['name'].' current episode',
-                                                  "required|less_than[$episodes]|is_natural_no_zero");
-            }
-            else {
-                # Episodes are unknown, currEpisode can be any value greater than 0
-                $this->form_validation->set_rules('epInput'.$i, $anime['name'].' current episode',
-                                                  "required|is_natural_no_zero");
-            }
-        }
-        
-        if($this->form_validation->run() == FALSE) {
-            $this->load->view('templates/header', $data);
-            $this->load->view('user/manage_watchlist', $data);
-            $this->load->view('templates/footer');
-        }
-        else {
-            # Initialize an array where we will be putting post values
-            $episodes_array = array();
+        if($this->session->userdata('logged_in')) {
+            # Get the user and their watchlist
+            $user_id = $this->session->userdata('user_id');
+            $user = $this->user_model->get_user_id($user_id);
+            $watchlist = $this->watching_model->get_watching_from_user($user_id);
+            $watchlist_count = count($watchlist);
             
+            # Put them into the data superarray
+            $data['user'] = $user;
+            $data['watchlist'] = $watchlist;
+            $data['title'] = 'Manage Your Watchlist';
+            $data['done'] = FALSE;
+            
+            # Create validation rules
             for($i = 0; $i < $watchlist_count; $i++) {
-                # DEBUG log message
-                $input = $this->input->post('epInput'.$i);
-                log_message('debug', 'epInput'.$i.' content: '.$this->input->post('epInput'.$i));
-                if($input == '') {
-                    log_message('debug', 'epInput'.$i.' is NULL!');
+                $anime = $watchlist[$i];
+                if($anime['episodes'] > 0) {
+                    # If the total episodes are known, currEpisode cannot exceed
+                    # this value
+                    $episodes = $anime['episodes'] + 1;
+                    $this->form_validation->set_rules('epInput'.$i, $anime['name'].' current episode',
+                                                      "required|less_than[$episodes]|is_natural_no_zero");
                 }
                 else {
-                    log_message('debug', 'epInput'.$i.' is set to '.$input.', setting episode of '.$watchlist[$i]['name'].' to input');
-                    $episodes_array[] = $this->input->post('epInput'.$i);
+                    # Episodes are unknown, currEpisode can be any value greater than 0
+                    $this->form_validation->set_rules('epInput'.$i, $anime['name'].' current episode',
+                                                      "required|is_natural_no_zero");
                 }
             }
             
-            # For every anime in the watchlist, modify their watching values
-            if(!(empty($episodes_array))) {
-                $i = 0;
-                foreach($watchlist as $anime) {
-                    $anime['currentEpisode'] = $episodes_array[$i];
-                    $this->watching_model->set_watching_episode($anime['watchingID'], $episodes_array[$i]);
-                    $i = $i + 1;
-                }
+            if($this->form_validation->run() == FALSE) {
+                $this->load->view('templates/header', $data);
+                $this->load->view('user/manage_watchlist', $data);
+                $this->load->view('templates/footer');
             }
-            
-            $data['watchlist'] = $this->watching_model->get_watching_from_user($user_id);
-            $data['done'] = TRUE;
-            
-            $this->load->view('templates/header', $data);
-            $this->load->view('user/manage_watchlist', $data);
-            $this->load->view('templates/footer');
+            else {
+                # Initialize an array where we will be putting post values
+                $episodes_array = array();
+                
+                for($i = 0; $i < $watchlist_count; $i++) {
+                    # DEBUG log message
+                    $input = $this->input->post('epInput'.$i);
+                    log_message('debug', 'epInput'.$i.' content: '.$this->input->post('epInput'.$i));
+                    if($input == '') {
+                        log_message('debug', 'epInput'.$i.' is NULL!');
+                    }
+                    else {
+                        log_message('debug', 'epInput'.$i.' is set to '.$input.', setting episode of '.$watchlist[$i]['name'].' to input');
+                        $episodes_array[] = $this->input->post('epInput'.$i);
+                    }
+                }
+                
+                # For every anime in the watchlist, modify their watching values
+                if(!(empty($episodes_array))) {
+                    $i = 0;
+                    foreach($watchlist as $anime) {
+                        $anime['currentEpisode'] = $episodes_array[$i];
+                        $this->watching_model->set_watching_episode($anime['watchingID'], $episodes_array[$i]);
+                        $i = $i + 1;
+                    }
+                }
+                
+                $data['watchlist'] = $this->watching_model->get_watching_from_user($user_id);
+                $data['done'] = TRUE;
+                
+                $this->load->view('templates/header', $data);
+                $this->load->view('user/manage_watchlist', $data);
+                $this->load->view('templates/footer');
+            }
+        }
+        else {
+            $this->login();
         }
     }
     

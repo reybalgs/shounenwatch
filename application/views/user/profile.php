@@ -154,7 +154,7 @@
                         <?php
                             if($this->session->userdata('username') == $username) {
                         ?>
-                        <a href="<?php echo site_url('user/manage_watchlist').'/'.$user->id?>" class="btn btn-default btn-xs pull-right"><i class="fa fa-pencil"></i> Manage</a>
+                        <a href="<?php echo site_url('user/manage_watchlist')?>" class="btn btn-default btn-xs pull-right"><i class="fa fa-pencil"></i> Manage</a>
                         <?php
                             }
                         ?>

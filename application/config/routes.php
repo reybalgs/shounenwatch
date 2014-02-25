@@ -72,7 +72,7 @@ $route['anime'] = "anime/index";
 
 # User routes
 $route['user/upload_image'] = "user/upload_image";
-$route['user/manage_watchlist/(:num)'] = "user/manage_watchlist/$1";
+$route['user/manage_watchlist'] = "user/manage_watchlist";
 $route['user/edit_profile'] = "user/edit_profile";
 $route['user/delete/(:num)'] = "user/delete/$1";
 $route['user/profile/(:any)'] = "user/profile/$1";
