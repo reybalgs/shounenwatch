@@ -22,7 +22,7 @@
                 <div class="panel-heading">
                     <h1 class="panel-title">
                         Edit Anime Information
-                        <a href="<?php echo site_url('anime').'/'.$anime_id ?>" class="pull-right"><i class="fa fa-long-arrow-left"></i> Click here to go back.</a>
+                        <a href="<?php echo site_url('anime').'/'.$anime_id ?>" class="btn btn-default btn-xs pull-right"><i class="fa fa-long-arrow-left"></i> Go back</a>
                     </h1>
                 </div>
                 <div class="panel-body">
