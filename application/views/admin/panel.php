@@ -80,6 +80,7 @@
                             <th>Airing Date</th>
                             <th>Synopsis</th>
                             <th>Episodes</th>
+                            <th>Action</th>
                         </tr>
                         <?php
                         foreach($anime as $submission) {
@@ -91,6 +92,16 @@
                             <td><?php echo $submission['airing'] ?></td>
                             <td><?php echo substr(nl2br($submission['synopsis']), 0, 80) ?>...</td>
                             <td><?php echo $submission['episodes'] ?></td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Action <i class="fa fa-caret-down"></i></button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a href="<?php echo site_url('anime/edit').'/'.$submission['id'] ?>"><i class="fa fa-fw fa-pencil"></i> Edit</a></li>
+                                        <li><a href="#"><i class="fa fa-fw fa-exclamation"></i> Deactivate</a></li>
+                                        <li><a href="#"><i class="fa fa-fw fa-times"></i> Delete</a></li>
+                                    </ul>
+                                </div>
+                            </td>
                         </tr>
                         <?php
                         }

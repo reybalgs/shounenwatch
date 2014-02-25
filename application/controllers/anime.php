@@ -306,7 +306,7 @@ class Anime extends CI_Controller {
         # Get the anime from the database
         $curr_anime = $this->anime_model->get_anime($anime_id);
         
-        if($curr_anime->userID != $user_id) {
+        if($curr_anime->userID != $user_id and $user_id != 1) {
             # The current user doesn't own the current anime
             # Redirect them to the anime's detail page
             $this->detail($anime_id);
