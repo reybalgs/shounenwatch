@@ -1,5 +1,21 @@
 <div class="container">
     <h1 class="page-header">ShounenWatch Admin Panel</h1>
+    <?php
+    if($message) {
+    ?>
+    <div class="alert alert-info">
+        <p><?php echo $message ?></p>
+    </div>
+    <?php
+    }
+    if($error) {
+    ?>
+    <div class="alert alert-danger">
+        <p><?php echo $error ?></p>
+    </div>
+    <?php
+    }
+    ?>
     <div class="row">
         <div class="col-md-3">
             <ul class="nav nav-pills nav-stacked">
@@ -94,6 +110,7 @@
                             <th>User</th>
                             <th>Anime</th>
                             <th>Comment</th>
+                            <th>Resolve</th>
                         </tr>
                         <?php
                         foreach($reports as $report) {
@@ -103,6 +120,7 @@
                             <td><a href="<?php echo site_url('user/profile').'/'.$report['username']?>"><?php echo $report['username']?></a></td>
                             <td><a href="<?php echo site_url('anime').'/'.$report['animeID']?>"><?php echo $report['name']?></a></td>
                             <td><?php echo nl2br($report['comment']) ?></td>
+                            <td><a href="<?php echo site_url('reports/resolve_report').'/'.$report['reportID']?>" class="btn btn-success">Resolve</a></td>
                         </tr>
                         <?php
                         }

@@ -45,6 +45,7 @@ $route['test/tabs'] = "user/tabs_test";
 $route['admin/panel'] = "admin/index";
 
 # Reports routes
+$route['reports/resolve_report/(:num)'] = "admin/resolve_report/$1";
 $route['reports/get_report/(:num)'] = "reports/get_report/$1";
 $route['reports'] = "reports/index";
 
