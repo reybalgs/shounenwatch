@@ -192,94 +192,104 @@ class User extends CI_Controller {
         
         $username = $this->session->userdata('username');
         
-        # Get the user from the database
-        $user = $this->user_model->get_user($username);
-        
-        $data['title'] = 'Edit your profile';
-        $data['user'] = $user;
-        $data['username'] = $username;
-        
-        $data['done'] = FALSE;
-        $data['wrong_password'] = FALSE;
-        
-        # Set the form validation rules
-        $this->form_validation->set_rules('edit-email', 'Email',
-                                          'valid_email|is_unique[user.email]');
-        $this->form_validation->set_rules('edit-password-new', 'New Password',
-                                          'matches[edit-password-newconf]');
-        
-        if($this->form_validation->run() == FALSE) {
-            $this->load->view('templates/header', $data);
-            $this->load->view('user/edit_profile', $data);
-            $this->load->view('templates/footer');
+        if(empty($username)) {
+            # The user is not logged in, show them the login page
+            $this->firephp->error("Username is empty!");
+            $this->login();
         }
         else {
-            # Everything checks out
-            # Assign the inputs to variables if there are anything inputted.
-            # If not, just use the current var of the user
+            # DEBUG: Display retrived username in console
+            $this->firephp->info($username, "Username retrieved from session");
             
-            $email_input = $this->input->post('edit-email');
-            $about_input = $this->input->post('edit-about');
-            $password_input = $this->input->post('edit-password-new');
+            # Get the user from the database
+            $user = $this->user_model->get_user($username);
             
-            # Check if there's an input in the email field
-            if(empty($email_input)) {
-                $email = $user->email;
+            $data['title'] = 'Edit your profile';
+            $data['user'] = $user;
+            $data['username'] = $username;
+            
+            $data['done'] = FALSE;
+            $data['wrong_password'] = FALSE;
+            
+            # Set the form validation rules
+            $this->form_validation->set_rules('edit-email', 'Email',
+                                              'valid_email|is_unique[user.email]');
+            $this->form_validation->set_rules('edit-password-new', 'New Password',
+                                              'matches[edit-password-newconf]');
+            
+            if($this->form_validation->run() == FALSE) {
+                $this->load->view('templates/header', $data);
+                $this->load->view('user/edit_profile', $data);
+                $this->load->view('templates/footer');
             }
             else {
-                $email = $email_input;
-            }
-            # Check if there's input in the about field
-            if(empty($about_input)) {
-                $about = $user->about;
-            }
-            else {
-                $about = $about_input;
-            }
-            # Check if there's input in the password field
-            if(empty($password_input)) {
-                $password = $user->password;
-            }
-            else {
-                # Check if the old password is correct
-                $old_password_input = $this->input->post('edit-password-old');
-                $old_password = hash("sha256", $old_password_input);
+                # Everything checks out
+                # Assign the inputs to variables if there are anything inputted.
+                # If not, just use the current var of the user
                 
-                if($old_password == $user->password) {
-                    $password = hash("sha256", $password_input);
+                $email_input = $this->input->post('edit-email');
+                $about_input = $this->input->post('edit-about');
+                $password_input = $this->input->post('edit-password-new');
+                
+                # Check if there's an input in the email field
+                if(empty($email_input)) {
+                    $email = $user->email;
                 }
                 else {
-                    # Set a flag for a wrong password
-                    $data['wrong_password'] = TRUE;
+                    $email = $email_input;
+                }
+                # Check if there's input in the about field
+                if(empty($about_input)) {
+                    $about = $user->about;
+                }
+                else {
+                    $about = $about_input;
+                }
+                # Check if there's input in the password field
+                if(empty($password_input)) {
                     $password = $user->password;
                 }
+                else {
+                    # Check if the old password is correct
+                    $old_password_input = $this->input->post('edit-password-old');
+                    $old_password = hash("sha256", $old_password_input);
+                    
+                    if($old_password == $user->password) {
+                        $password = hash("sha256", $password_input);
+                    }
+                    else {
+                        # Set a flag for a wrong password
+                        $data['wrong_password'] = TRUE;
+                        $password = $user->password;
+                    }
+                }
+                
+                # Create the user that we will be putting into the database
+                $input = array(
+                    'email'=>$email,
+                    'about'=>$about,
+                    'password'=>$password
+                );
+                
+                # Perform the query
+                $this->user_model->edit_user($user->id, $input);
+                
+                # Update the model we're going to pass
+                $user = $this->user_model->get_user($username);
+                $data['user'] = $user;
+                
+                $data['title'] = $user->username."'s"." profile";
+                
+                # Load important user data into data superarray
+                $data['username'] = $user->username;
+                
+                $data['done'] = TRUE;
+                
+                # Go back to the User's Profile
+                $this->load->view('templates/header', $data);
+                $this->load->view('user/edit_profile', $data);
+                $this->load->view('templates/footer');
             }
-            
-            # Create the user that we will be putting into the database
-            $input = array(
-                'email'=>$email,
-                'about'=>$about,
-                'password'=>$password
-            );
-            
-            # Perform the query
-            $this->user_model->edit_user($user->id, $input);
-            
-            # Update the model we're going to pass
-            $user = $this->user_model->get_user($username);
-            $data['user'] = $user;
-            
-            $data['title'] = $user->username."'s"." profile";
-            
-            # Load important user data into data superarray
-            $data['username'] = $user->username;
-            
-            $data['done'] = TRUE;
-            
-            # Go back to the User's Profile
-            $this->load->view('templates/header', $data);
-            $this->load->view('user/edit_profile', $data);
-            $this->load->view('templates/footer');
         }
     }
     
