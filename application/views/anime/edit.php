@@ -103,7 +103,7 @@
                         <?php
                             }
                         ?>
-                            <label for="animeInputAiring" class="col-sm-2 control-label">Episodes*</label>
+                            <label for="animeInputEpisodes" class="col-sm-2 control-label">Episodes*</label>
                             <div class="col-sm-6">
                                 <?php
                                     $title_input = array(
@@ -111,7 +111,6 @@
                                         'value'=>$curr_anime->episodes,
                                         'class'=>'form-control',
                                         'id'=>'animeInputEpisodes',
-                                        'type'=>'date',
                                         'placeholder'=>'Episodes'
                                     );
                                     echo form_input($title_input);

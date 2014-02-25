@@ -100,7 +100,6 @@
                                         'value'=>set_value('anime-episodes'),
                                         'class'=>'form-control',
                                         'id'=>'animeInputEpisodes',
-                                        'type'=>'date',
                                         'placeholder'=>'Episodes'
                                     );
                                     echo form_input($title_input);

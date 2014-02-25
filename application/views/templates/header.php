@@ -46,22 +46,16 @@
     </div>
     <div id="navbar-items" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <?php
-            # If we are logged in, home link should take us to anime list
-            if($this->session->userdata('logged_in')) {
-        ?>
-        <li class="active"><a href="<?php echo site_url('anime')?>"><i class="fa fa-home"></i> Home</a></li>
-        <?php
-            }
-            else {
-        ?>
-        <li class="active"><a href="<?php echo base_url('')?>"><i class="fa fa-home"></i> Home</a></li>
-        <?php
-            }
-        ?>
-        <li><a href="<?php echo site_url('anime/browse/all') ?>"><i class="fa fa-bars"></i> Browse</a></li>
-        <li><a href="<?php echo site_url('anime/browse/watching') ?>"><i class="fa fa-trophy"></i> Most Watched</a></li>
-        <li><a href="<?php echo site_url('anime/browse/rating') ?>"><i class="fa fa-star"></i> Top Rated</a></li>
+        <li class="hidden-md hidden-sm"><a href="<?php echo base_url('')?>"><i class="fa fa-home"></i> Home</a></li>
+        <li class="visible-sm"><a href="<?php echo base_url('')?>"><i class="fa fa-home" data-toggle="tooltip" data-placement="bottom" title="Home"></i></a></li>
+        <li class="hidden-sm"><a href="<?php echo site_url('anime/browse/all') ?>"><i class="fa fa-bars"></i> Browse</a></li>
+        <li class="visible-sm"><a href="<?php echo site_url('anime/browse/all') ?>"><i class="fa fa-bars"></i></a></li>
+        <li class="hidden-sm"><a href="<?php echo site_url('anime/browse/watching') ?>"><i class="fa fa-trophy"></i> Most Watched</a></li>
+        <li class="visible-sm"><a href="<?php echo site_url('anime/browse/watching') ?>"><i class="fa fa-trophy"></i></a></li>
+        <li class="hidden-sm"><a href="<?php echo site_url('anime/browse/rating') ?>"><i class="fa fa-star"></i> Top Rated</a></li>
+        <li class="visible-sm"><a href="<?php echo site_url('anime/browse/rating') ?>"><i class="fa fa-star"></i></a></li>
+        <li class="hidden-sm"><a href="<?php echo site_url('anime/search')?>"><i class="fa fa-search"></i> Search</a></li>
+        <li class="visible-sm"><a href="<?php echo site_url('anime/search')?>"><i class="fa fa-search"></i></a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <?php

@@ -16,7 +16,6 @@ class Anime extends CI_Controller {
     public function browse($type) {
         # Displays all the anime in a paginated list.
         $config = array(
-            "base_url"=>site_url('anime/browse/all'),
             "total_rows"=>$this->anime_model->count_all_anime(),
             "per_page"=>12,
             "uri_segment"=>4,
@@ -39,6 +38,16 @@ class Anime extends CI_Controller {
             "prev_tag_open"=>'<li>',
             "prev_tag_close"=>'</li>'
         );
+        
+        if($type == 'all') {
+            $config['base_url'] = site_url('anime/browse/all');
+        }
+        else if($type == 'watching') {
+            $config['base_url'] = site_url('anime/browse/watching');
+        }
+        else if($type == 'rating') {
+            $config['base_url'] = site_url('anime/browse/rating');
+        }
         
         # Inititalize pagination library
         $this->pagination->initialize($config);
@@ -63,6 +72,44 @@ class Anime extends CI_Controller {
         $this->load->view('templates/header', $data);
         $this->load->view('anime/browse', $data);
         $this->load->view('templates/footer');
+    }
+    
+    public function search() {
+        # Search function for looking for anime given a search term.
+        $this->load->helper('form');
+        $this->load->library('form_validation');
+        
+        $data['title'] = 'Search for Anime';
+        $data['anime_list'] = null;
+        $data['empty'] = FALSE;
+        
+        # Form validation rules
+        $this->form_validation->set_rules('search-input', 'Search Field',
+                                          'required|min_length[4]');
+        
+        if($this->form_validation->run() == FALSE) {
+            $this->load->view('templates/header', $data);
+            $this->load->view('anime/search', $data);
+            $this->load->view('templates/footer');
+        }
+        else {
+            # Get the post data
+            $search_term = $this->input->post('search-input');
+            
+            # Retrieve the results
+            $data['anime_list'] = $this->anime_model->search_anime_title($search_term);
+            
+            if(empty($data['anime_list'])) {
+                $data['empty'] = TRUE;
+            }
+            
+            $data['links'] = $this->pagination->create_links();
+            $data['title'] = 'Search results for '.$search_term;
+            
+            $this->load->view('templates/header', $data);
+            $this->load->view('anime/search', $data);
+            $this->load->view('templates/footer');
+        }
     }
     
     public function detail($anime_id, $submit_success = NULL,

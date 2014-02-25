@@ -1,7 +1,7 @@
-<div class="jumbotron" id="jumbotron-torgue" style="background: #888888 url('<?php echo base_url('')?>static/torgue.jpg') repeat center center; min-height: 200px">
-        <h1 class="text-center" style="color: #ffffff; text-shadow: 2px 2px 8px #010101; padding-top: 260px" >Hey you!</h1>
-        <p class="text-center" style="color: #ffffff; text-shadow: 2px 2px 8px #010101">I'm <strong>TORGUE</strong>, and I am here to ask you one question, and one question only:</p>
-        <p class="text-center"><a href="<?php echo site_url('user') ?>" id="explosion-btn" class="btn btn-danger btn-lg" role="button">EXPLOSIONS?!</a></p>
+<div class="jumbotron" id="jumbotron-torgue" style="background: #888888 url('http://dummyimage.com/1366x768/111/ffffff') repeat center center; min-height: 200px">
+        <h1 class="text-center" style="color: #ffffff; text-shadow: 2px 2px 8px #010101; padding-top: 260px" >The smart shounen tracker</h1>
+        <p class="text-center" style="color: #ffffff; text-shadow: 2px 2px 8px #010101">For the fans of the hard and badass shounen genre.</p>
+        <p class="text-center"><a href="<?php echo site_url('user') ?>" id="explosion-btn" class="btn btn-danger btn-lg" role="button">Get started!</a></p>
         <script>
             // Script that changes the jumbotron image when the button is pressed
             var button = $("#explosion-btn");
@@ -20,7 +20,7 @@
     <div class="row">
         <div class="col-md-8">
             <h1>What is ShounenWatch?</h1>
-            <p><strong>ShounenWatch</strong> is the best thing since sliced bread! And explosions! It's a site where people submit badass shounen anime. <i>Shounen</i> anime are anime for real men, not like those shoujo anime for girls, and pussies!</p>
+            <p><strong>ShounenWatch</strong> is the best thing since sliced bread! And explosions! It's a site where people submit badass shounen anime. <i>Shounen</i> anime are anime for real men!</p>
             <p>Here's what you can do with ShounenWatch:</p>
             <ul>
                 <li>Be a badass</li>
@@ -34,7 +34,7 @@
         </div>
         <div class="col-md-4">
             <h3>Where do I sign up?</h3>
-            <p>You've come to the right place! If you're willing to be badass, just click the <strong>EXPLOSIONS</strong> button over there, and you'll be on your way!</p>
+            <p>You've come to the right place! If you're willing to be badass, just click the button up there, and register for an account!</p>
         </div>
     </div>
 </div>
