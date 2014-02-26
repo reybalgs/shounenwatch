@@ -71,7 +71,12 @@
                     <p>
                         The Anime tab is where you can see all the anime submitted to the system in one whole list.
                     </p>
+                    <div class="alert alert-warning alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <strong>Note:</strong> Inactive anime ("deleted" anime with viewers) are highlighted in yellow.
+                    </div>
                     <h3>Full Anime List</h3>
+                    <a href="<?php echo site_url('anime/submit') ?>" class="btn btn-primary pull-right" style="margin-bottom: 1em"><i class="fa fa-plus"></i> Add New Anime</a>
                     <table class="table table-bordered table-striped table-hover">
                         <tr>
                             <th>ID</th>
@@ -84,8 +89,17 @@
                         </tr>
                         <?php
                         foreach($anime as $submission) {
+                            if(!($submission['active'])) {
+                        ?>
+                        <tr class="warning">
+                        <?php
+                            }
+                            else {
                         ?>
                         <tr>
+                        <?php
+                            }
+                        ?>
                             <td><?php echo $submission['id'] ?></td>
                             <td><a href="<?php echo site_url('anime').'/'.$submission['id']?>"><?php echo $submission['name'] ?></a></td>
                             <td><?php echo $submission['username'] ?></td>
@@ -97,8 +111,7 @@
                                     <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Action <i class="fa fa-caret-down"></i></button>
                                     <ul class="dropdown-menu" role="menu">
                                         <li><a href="<?php echo site_url('anime/edit').'/'.$submission['id'] ?>"><i class="fa fa-fw fa-pencil"></i> Edit</a></li>
-                                        <li><a href="#"><i class="fa fa-fw fa-exclamation"></i> Deactivate</a></li>
-                                        <li><a href="#"><i class="fa fa-fw fa-times"></i> Delete</a></li>
+                                        <li><a href="<?php echo site_url('anime/delete').'/'.$submission['id'] ?>"><i class="fa fa-fw fa-times"></i> Deactivate/Delete</a></li>
                                     </ul>
                                 </div>
                             </td>

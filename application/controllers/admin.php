@@ -6,6 +6,7 @@ class Admin extends CI_Controller {
         $this->load->model('anime_model');
         $this->load->model('reports_model');
         $this->load->library('../controllers/reports');
+        $this->load->library('../controllers/anime');
     }
     
     public function resolve_report($report_id) {
@@ -39,7 +40,7 @@ class Admin extends CI_Controller {
            $this->session->userdata('user_id') == 1) {
             $data['title'] = 'ShounenWatch Admin Panel';
             $data['users'] = $this->user_model->get_users();
-            $data['anime'] = $this->anime_model->get_all_anime();
+            $data['anime'] = $this->anime_model->get_all_anime(null, null, true, true);
             $data['reports'] = $this->reports_model->get_all_reports();
             $data['message'] = $message;
             $data['error'] = $error;

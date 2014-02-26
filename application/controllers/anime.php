@@ -13,7 +13,7 @@ class Anime extends CI_Controller {
         $this->load->library('pagination');
     }
     
-    public function browse($type) {
+    public function browse($type = 'all') {
         # Displays all the anime in a paginated list.
         $config = array(
             "total_rows"=>$this->anime_model->count_all_anime(),
@@ -164,12 +164,20 @@ class Anime extends CI_Controller {
         $this->detail($anime_id);
     }
     
+    public function check_if_watched($anime_id) {
+        # Checks whether the anime has any viewers.
+        if(count($this->watching_model->get_watching_anime($anime_id))) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    
     public function delete($anime_id) {
         # Deletes or makes inactive the given anime.
         # First, let's see if the anime has any viewers
-        $viewers = count($this->watching_model->get_watching_anime($anime_id));
-        
-        if($viewers) {
+        if($this->check_if_watched($anime_id)) {
             # This anime has viewers, we can only make it inactive.
             $this->anime_model->make_anime_inactive($anime_id);
             
@@ -182,7 +190,7 @@ class Anime extends CI_Controller {
             $this->anime_model->delete_anime($anime_id);
             
             # Go to a page containing all anime.
-            $this->index();
+            $this->browse();
         }
     }
     
