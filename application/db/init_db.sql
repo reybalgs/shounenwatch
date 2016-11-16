@@ -1,12 +1,12 @@
 /*
     init_db.sql
-    
+
     Run this .sql file whenever you are in a new environment with no sqlite3
     database initialized.
-    
+
     It will create the necessary tables, as well as create the initial
     superuser.
-    
+
     Note that we are lib
 */
 
@@ -54,11 +54,14 @@ CREATE TABLE watching (
 );
 
 -- Create a table for CI to store sessions in
-CREATE TABLE ci_sessions (
-    session_id VARCHAR(40) DEFAULT '0' NOT NULL PRIMARY KEY,
-    ip_address VARCHAR(45) DEFAULT '0' NOT NULL,
-    user_agent VARCHAR(120) NOT NULL,
-    last_activity INTEGER DEFAULT 0 NOT NULL
+CREATE TABLE IF NOT EXISTS  `ci_sessions` (
+    session_id varchar(40) DEFAULT '0' NOT NULL,
+    ip_address varchar(45) DEFAULT '0' NOT NULL,
+    user_agent varchar(120) NOT NULL,
+    last_activity int(10) unsigned DEFAULT 0 NOT NULL,
+    user_data text NOT NULL,
+    PRIMARY KEY (session_id),
+    KEY `last_activity_idx` (`last_activity`)
 );
 
 -- Populate the user table with the superuser
