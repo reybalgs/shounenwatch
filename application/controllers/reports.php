@@ -6,6 +6,11 @@ class Reports extends CI_Controller{
         $this->load->model('reports_model');
     }
     
+    public function resolve_report($report_id) {
+        # Resolves the given report, in other words, deletes it.
+        $this->reports_model->remove_report($report_id);
+    }
+    
     public function get_report($anime_id) {
         $comment = $this->input->post('report-comment');
         

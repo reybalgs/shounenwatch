@@ -18,10 +18,9 @@
                 ));
             }
         ?>
-        <form method="post" action="<?php echo site_url('user/upload_image')?>" enctype="multipart/form-data">
+        <?php echo form_open_multipart(site_url('user/upload_image')) ?>
             <p class="text-muted"><?php echo $this->upload->display_errors()?></p>
             <input type="file" name="userfile" size="20"/>
             <input type="submit" value="Upload" class="btn btn-default btn-block"/>
-        </form>
     </div>
 </div>
