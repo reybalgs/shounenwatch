@@ -18,8 +18,13 @@ class User_model extends CI_Model{
     
     public function get_user($username) {
         # Queries a user from the database based on the provided username
-        $query = $this->db->get_where('user', array("username"=>$username));
-        return $query->row();
+        if(isset($username)) {
+            $query = $this->db->get_where('user', array("username"=>$username));
+            return $query->row();
+        }
+        else {
+            return false;
+        }
     }
     
     public function get_user_id($id) {

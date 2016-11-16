@@ -34,77 +34,83 @@ class User extends CI_Controller {
         }
     }
     
-    public function manage_watchlist($user_id) {
+    public function manage_watchlist() {
         $this->load->helper('form');
         $this->load->library('form_validation');
         # Manages the watchlist of the given user.
         
-        # Get the user and their watchlist
-        $user = $this->user_model->get_user_id($user_id);
-        $watchlist = $this->watching_model->get_watching_from_user($user_id);
-        $watchlist_count = count($watchlist);
-        
-        # Put them into the data superarray
-        $data['user'] = $user;
-        $data['watchlist'] = $watchlist;
-        $data['title'] = 'Manage Your Watchlist';
-        $data['done'] = FALSE;
-        
-        # Create validation rules
-        for($i = 0; $i < $watchlist_count; $i++) {
-            $anime = $watchlist[$i];
-            if($anime['episodes'] > 0) {
-                # If the total episodes are known, currEpisode cannot exceed
-                # this value
-                $episodes = $anime['episodes'] + 1;
-                $this->form_validation->set_rules('epInput'.$i, $anime['name'].' current episode',
-                                                  "required|less_than[$episodes]|is_natural_no_zero");
-            }
-            else {
-                # Episodes are unknown, currEpisode can be any value greater than 0
-                $this->form_validation->set_rules('epInput'.$i, $anime['name'].' current episode',
-                                                  "required|is_natural_no_zero");
-            }
-        }
-        
-        if($this->form_validation->run() == FALSE) {
-            $this->load->view('templates/header', $data);
-            $this->load->view('user/manage_watchlist', $data);
-            $this->load->view('templates/footer');
-        }
-        else {
-            # Initialize an array where we will be putting post values
-            $episodes_array = array();
+        if($this->session->userdata('logged_in')) {
+            # Get the user and their watchlist
+            $user_id = $this->session->userdata('user_id');
+            $user = $this->user_model->get_user_id($user_id);
+            $watchlist = $this->watching_model->get_watching_from_user($user_id);
+            $watchlist_count = count($watchlist);
             
+            # Put them into the data superarray
+            $data['user'] = $user;
+            $data['watchlist'] = $watchlist;
+            $data['title'] = 'Manage Your Watchlist';
+            $data['done'] = FALSE;
+            
+            # Create validation rules
             for($i = 0; $i < $watchlist_count; $i++) {
-                # DEBUG log message
-                $input = $this->input->post('epInput'.$i);
-                log_message('debug', 'epInput'.$i.' content: '.$this->input->post('epInput'.$i));
-                if($input == '') {
-                    log_message('debug', 'epInput'.$i.' is NULL!');
+                $anime = $watchlist[$i];
+                if($anime['episodes'] > 0) {
+                    # If the total episodes are known, currEpisode cannot exceed
+                    # this value
+                    $episodes = $anime['episodes'] + 1;
+                    $this->form_validation->set_rules('epInput'.$i, $anime['name'].' current episode',
+                                                      "required|less_than[$episodes]|is_natural_no_zero");
                 }
                 else {
-                    log_message('debug', 'epInput'.$i.' is set to '.$input.', setting episode of '.$watchlist[$i]['name'].' to input');
-                    $episodes_array[] = $this->input->post('epInput'.$i);
+                    # Episodes are unknown, currEpisode can be any value greater than 0
+                    $this->form_validation->set_rules('epInput'.$i, $anime['name'].' current episode',
+                                                      "required|is_natural_no_zero");
                 }
             }
             
-            # For every anime in the watchlist, modify their watching values
-            if(!(empty($episodes_array))) {
-                $i = 0;
-                foreach($watchlist as $anime) {
-                    $anime['currentEpisode'] = $episodes_array[$i];
-                    $this->watching_model->set_watching_episode($anime['watchingID'], $episodes_array[$i]);
-                    $i = $i + 1;
-                }
+            if($this->form_validation->run() == FALSE) {
+                $this->load->view('templates/header', $data);
+                $this->load->view('user/manage_watchlist', $data);
+                $this->load->view('templates/footer');
             }
-            
-            $data['watchlist'] = $this->watching_model->get_watching_from_user($user_id);
-            $data['done'] = TRUE;
-            
-            $this->load->view('templates/header', $data);
-            $this->load->view('user/manage_watchlist', $data);
-            $this->load->view('templates/footer');
+            else {
+                # Initialize an array where we will be putting post values
+                $episodes_array = array();
+                
+                for($i = 0; $i < $watchlist_count; $i++) {
+                    # DEBUG log message
+                    $input = $this->input->post('epInput'.$i);
+                    log_message('debug', 'epInput'.$i.' content: '.$this->input->post('epInput'.$i));
+                    if($input == '') {
+                        log_message('debug', 'epInput'.$i.' is NULL!');
+                    }
+                    else {
+                        log_message('debug', 'epInput'.$i.' is set to '.$input.', setting episode of '.$watchlist[$i]['name'].' to input');
+                        $episodes_array[] = $this->input->post('epInput'.$i);
+                    }
+                }
+                
+                # For every anime in the watchlist, modify their watching values
+                if(!(empty($episodes_array))) {
+                    $i = 0;
+                    foreach($watchlist as $anime) {
+                        $anime['currentEpisode'] = $episodes_array[$i];
+                        $this->watching_model->set_watching_episode($anime['watchingID'], $episodes_array[$i]);
+                        $i = $i + 1;
+                    }
+                }
+                
+                $data['watchlist'] = $this->watching_model->get_watching_from_user($user_id);
+                $data['done'] = TRUE;
+                
+                $this->load->view('templates/header', $data);
+                $this->load->view('user/manage_watchlist', $data);
+                $this->load->view('templates/footer');
+            }
+        }
+        else {
+            $this->login();
         }
     }
     
@@ -192,94 +198,104 @@ class User extends CI_Controller {
         
         $username = $this->session->userdata('username');
         
-        # Get the user from the database
-        $user = $this->user_model->get_user($username);
-        
-        $data['title'] = 'Edit your profile';
-        $data['user'] = $user;
-        $data['username'] = $username;
-        
-        $data['done'] = FALSE;
-        $data['wrong_password'] = FALSE;
-        
-        # Set the form validation rules
-        $this->form_validation->set_rules('edit-email', 'Email',
-                                          'valid_email|is_unique[user.email]');
-        $this->form_validation->set_rules('edit-password-new', 'New Password',
-                                          'matches[edit-password-newconf]');
-        
-        if($this->form_validation->run() == FALSE) {
-            $this->load->view('templates/header', $data);
-            $this->load->view('user/edit_profile', $data);
-            $this->load->view('templates/footer');
+        if(empty($username)) {
+            # The user is not logged in, show them the login page
+            $this->firephp->error("Username is empty!");
+            $this->login();
         }
         else {
-            # Everything checks out
-            # Assign the inputs to variables if there are anything inputted.
-            # If not, just use the current var of the user
+            # DEBUG: Display retrived username in console
+            $this->firephp->info($username, "Username retrieved from session");
             
-            $email_input = $this->input->post('edit-email');
-            $about_input = $this->input->post('edit-about');
-            $password_input = $this->input->post('edit-password-new');
+            # Get the user from the database
+            $user = $this->user_model->get_user($username);
             
-            # Check if there's an input in the email field
-            if(empty($email_input)) {
-                $email = $user->email;
+            $data['title'] = 'Edit your profile';
+            $data['user'] = $user;
+            $data['username'] = $username;
+            
+            $data['done'] = FALSE;
+            $data['wrong_password'] = FALSE;
+            
+            # Set the form validation rules
+            $this->form_validation->set_rules('edit-email', 'Email',
+                                              'valid_email|is_unique[user.email]');
+            $this->form_validation->set_rules('edit-password-new', 'New Password',
+                                              'matches[edit-password-newconf]');
+            
+            if($this->form_validation->run() == FALSE) {
+                $this->load->view('templates/header', $data);
+                $this->load->view('user/edit_profile', $data);
+                $this->load->view('templates/footer');
             }
             else {
-                $email = $email_input;
-            }
-            # Check if there's input in the about field
-            if(empty($about_input)) {
-                $about = $user->about;
-            }
-            else {
-                $about = $about_input;
-            }
-            # Check if there's input in the password field
-            if(empty($password_input)) {
-                $password = $user->password;
-            }
-            else {
-                # Check if the old password is correct
-                $old_password_input = $this->input->post('edit-password-old');
-                $old_password = hash("sha256", $old_password_input);
+                # Everything checks out
+                # Assign the inputs to variables if there are anything inputted.
+                # If not, just use the current var of the user
                 
-                if($old_password == $user->password) {
-                    $password = hash("sha256", $password_input);
+                $email_input = $this->input->post('edit-email');
+                $about_input = $this->input->post('edit-about');
+                $password_input = $this->input->post('edit-password-new');
+                
+                # Check if there's an input in the email field
+                if(empty($email_input)) {
+                    $email = $user->email;
                 }
                 else {
-                    # Set a flag for a wrong password
-                    $data['wrong_password'] = TRUE;
+                    $email = $email_input;
+                }
+                # Check if there's input in the about field
+                if(empty($about_input)) {
+                    $about = $user->about;
+                }
+                else {
+                    $about = $about_input;
+                }
+                # Check if there's input in the password field
+                if(empty($password_input)) {
                     $password = $user->password;
                 }
+                else {
+                    # Check if the old password is correct
+                    $old_password_input = $this->input->post('edit-password-old');
+                    $old_password = hash("sha256", $old_password_input);
+                    
+                    if($old_password == $user->password) {
+                        $password = hash("sha256", $password_input);
+                    }
+                    else {
+                        # Set a flag for a wrong password
+                        $data['wrong_password'] = TRUE;
+                        $password = $user->password;
+                    }
+                }
+                
+                # Create the user that we will be putting into the database
+                $input = array(
+                    'email'=>$email,
+                    'about'=>$about,
+                    'password'=>$password
+                );
+                
+                # Perform the query
+                $this->user_model->edit_user($user->id, $input);
+                
+                # Update the model we're going to pass
+                $user = $this->user_model->get_user($username);
+                $data['user'] = $user;
+                
+                $data['title'] = $user->username."'s"." profile";
+                
+                # Load important user data into data superarray
+                $data['username'] = $user->username;
+                
+                $data['done'] = TRUE;
+                
+                # Go back to the User's Profile
+                $this->load->view('templates/header', $data);
+                $this->load->view('user/edit_profile', $data);
+                $this->load->view('templates/footer');
             }
-            
-            # Create the user that we will be putting into the database
-            $input = array(
-                'email'=>$email,
-                'about'=>$about,
-                'password'=>$password
-            );
-            
-            # Perform the query
-            $this->user_model->edit_user($user->id, $input);
-            
-            # Update the model we're going to pass
-            $user = $this->user_model->get_user($username);
-            $data['user'] = $user;
-            
-            $data['title'] = $user->username."'s"." profile";
-            
-            # Load important user data into data superarray
-            $data['username'] = $user->username;
-            
-            $data['done'] = TRUE;
-            
-            # Go back to the User's Profile
-            $this->load->view('templates/header', $data);
-            $this->load->view('user/edit_profile', $data);
-            $this->load->view('templates/footer');
         }
     }
     

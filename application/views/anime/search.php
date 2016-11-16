@@ -92,7 +92,7 @@
     }
     if($empty) {
     ?>
-    <div class="col-xs-4 col-xs-offset-4 text-center">
+    <div class="col-md-6 col-md-offset-3 text-center">
         <h1><i class="fa fa-question-circle fa-5x"></i></h1>
         <h3>Sorry, no results were found!</h3>
         <p>Please try again.</p>

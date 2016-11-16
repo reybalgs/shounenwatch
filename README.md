@@ -17,7 +17,7 @@ How to work on this project
 
 3.  Be sure to **not** work directly with the master branch.
 
-4.  Set up the SQLite database server. For more info, see below.
+4.  Set up the MySQL database server. For more info, see below.
 
 Setting up the database
 -----------------------

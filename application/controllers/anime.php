@@ -13,7 +13,7 @@ class Anime extends CI_Controller {
         $this->load->library('pagination');
     }
     
-    public function browse($type) {
+    public function browse($type = 'all') {
         # Displays all the anime in a paginated list.
         $config = array(
             "total_rows"=>$this->anime_model->count_all_anime(),
@@ -164,12 +164,20 @@ class Anime extends CI_Controller {
         $this->detail($anime_id);
     }
     
+    public function check_if_watched($anime_id) {
+        # Checks whether the anime has any viewers.
+        if(count($this->watching_model->get_watching_anime($anime_id))) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    
     public function delete($anime_id) {
         # Deletes or makes inactive the given anime.
         # First, let's see if the anime has any viewers
-        $viewers = count($this->watching_model->get_watching_anime($anime_id));
-        
-        if($viewers) {
+        if($this->check_if_watched($anime_id)) {
             # This anime has viewers, we can only make it inactive.
             $this->anime_model->make_anime_inactive($anime_id);
             
@@ -182,7 +190,7 @@ class Anime extends CI_Controller {
             $this->anime_model->delete_anime($anime_id);
             
             # Go to a page containing all anime.
-            $this->index();
+            $this->browse();
         }
     }
     
@@ -300,103 +308,108 @@ class Anime extends CI_Controller {
         
         # Get the username of the currently logged-in user.
         $username = $this->session->userdata('username');
-        # Get the user from that username
-        $user = $this->user_model->get_user($username);
         # Get the ID of the currently logged in user
-        $user_id = $user->id;
+        $user_id = $this->session->userdata('user_id');
         
         # Get the anime from the database
         $curr_anime = $this->anime_model->get_anime($anime_id);
         
-        $data['title'] = 'Editing '.$curr_anime->name;
-        $data['anime_id'] = $anime_id;
-        $data['curr_anime'] = $curr_anime;
-        
-        # Form validation rules
-        $this->form_validation->set_rules('anime-title', 'Title',
-                                          'is_unique[anime.name]');
-        $this->form_validation->set_rules('anime-episodes', 'Episodes',
-                                          'is_natural');
-        
-        if($this->form_validation->run() == FALSE) {
-            $this->load->view('templates/header', $data);
-            $this->load->view('anime/edit', $data);
-            $this->load->view('templates/footer');
+        if($curr_anime->userID != $user_id and $user_id != 1) {
+            # The current user doesn't own the current anime
+            # Redirect them to the anime's detail page
+            $this->detail($anime_id);
         }
         else {
-            # Get the post data
-            $title_input = $this->input->post('anime-title');
-            $airing_input = $this->input->post('anime-airing');
-            $episodes_input = $this->input->post('anime-episodes');
-            $synopsis_input = $this->input->post('anime-synopsis');
+            $data['title'] = 'Editing '.$curr_anime->name;
+            $data['anime_id'] = $anime_id;
+            $data['curr_anime'] = $curr_anime;
             
-            # Check if there are inputs in the fields
-            # If inputs are missing, vars are set to current values
-            if(empty($title_input)) {
-                $title = $curr_anime->name;
+            # Form validation rules
+            $this->form_validation->set_rules('anime-title', 'Title',
+                                              'is_unique[anime.name]');
+            $this->form_validation->set_rules('anime-episodes', 'Episodes',
+                                              'is_natural');
+            
+            if($this->form_validation->run() == FALSE) {
+                $this->load->view('templates/header', $data);
+                $this->load->view('anime/edit', $data);
+                $this->load->view('templates/footer');
             }
             else {
-                $title = $title_input;
+                # Get the post data
+                $title_input = $this->input->post('anime-title');
+                $airing_input = $this->input->post('anime-airing');
+                $episodes_input = $this->input->post('anime-episodes');
+                $synopsis_input = $this->input->post('anime-synopsis');
+                
+                # Check if there are inputs in the fields
+                # If inputs are missing, vars are set to current values
+                if(empty($title_input)) {
+                    $title = $curr_anime->name;
+                }
+                else {
+                    $title = $title_input;
+                }
+                if(empty($airing_input)) {
+                    $airing = $curr_anime->airing;
+                }
+                else {
+                    $airing = $airing_input;
+                }
+                if(empty($episodes_input)) {
+                    $episodes = $curr_anime->episodes;
+                }
+                else {
+                    $episodes = $episodes_input;
+                }
+                if(empty($synopsis_input)) {
+                    $synopsis = $curr_anime->synopsis;
+                }
+                else {
+                    $synopsis = $synopsis_input;
+                }
+                
+                # Config files for uploading anime images
+                $config['upload_path'] = './upload/anime/';
+                # Shorten the title into 24 chars most
+                $config['file_name'] = substr($title, 0, 64).'.jpg';
+                $config['allowed_types'] = 'gif|jpg|png|jpeg';
+                $config['max_size']	= '2048';
+                $config['max_width']  = '4096';
+                $config['max_height']  = '4096';
+                $config['overwrite'] = TRUE;
+                # Load the upload library
+                $this->load->library('upload', $config);
+                
+                # Put data into an array that will be passed to the model
+                if($this->upload->do_upload()) {
+                    $upload_data = $this->upload->data();
+                    $animedata = array(
+                        'name'=>$title,
+                        'synopsis'=>$synopsis,
+                        'episodes'=>$episodes,
+                        'airing'=>$airing,
+                        'image'=>$upload_data['file_name']
+                    );
+                }
+                else {
+                    $animedata = array(
+                        'name'=>$title,
+                        'synopsis'=>$synopsis,
+                        'episodes'=>$episodes,
+                        'airing'=>$airing,
+                    );
+                }
+                
+                # Edit the selected anime, perform the query
+                $this->anime_model->edit_anime($anime_id, $animedata);
+                
+                # Get the new anime from the database
+                #$new_anime = $this->anime_model->get_anime($curr_anime->id);
+                
+                # Show the detail page of our anime
+                $this->detail($anime_id, TRUE, $this->upload->display_errors());
             }
-            if(empty($airing_input)) {
-                $airing = $curr_anime->airing;
-            }
-            else {
-                $airing = $airing_input;
-            }
-            if(empty($episodes_input)) {
-                $episodes = $curr_anime->episodes;
-            }
-            else {
-                $episodes = $episodes_input;
-            }
-            if(empty($synopsis_input)) {
-                $synopsis = $curr_anime->synopsis;
-            }
-            else {
-                $synopsis = $synopsis_input;
-            }
-            
-            # Config files for uploading anime images
-            $config['upload_path'] = './upload/anime/';
-            # Shorten the title into 24 chars most
-            $config['file_name'] = substr($title, 0, 64).'.jpg';
-            $config['allowed_types'] = 'gif|jpg|png|jpeg';
-            $config['max_size']	= '2048';
-            $config['max_width']  = '4096';
-            $config['max_height']  = '4096';
-            $config['overwrite'] = TRUE;
-            # Load the upload library
-            $this->load->library('upload', $config);
-            
-            # Put data into an array that will be passed to the model
-            if($this->upload->do_upload()) {
-                $upload_data = $this->upload->data();
-                $animedata = array(
-                    'name'=>$title,
-                    'synopsis'=>$synopsis,
-                    'episodes'=>$episodes,
-                    'airing'=>$airing,
-                    'image'=>$upload_data['file_name']
-                );
-            }
-            else {
-                $animedata = array(
-                    'name'=>$title,
-                    'synopsis'=>$synopsis,
-                    'episodes'=>$episodes,
-                    'airing'=>$airing,
-                );
-            }
-            
-            # Edit the selected anime, perform the query
-            $this->anime_model->edit_anime($anime_id, $animedata);
-            
-            # Get the new anime from the database
-            #$new_anime = $this->anime_model->get_anime($curr_anime->id);
-            
-            # Show the detail page of our anime
-            $this->detail($anime_id, TRUE, $this->upload->display_errors());
         }
     }
     
